@@ -89,9 +89,9 @@
     <h1>🌾 Peta Potensi Sektor Desa Ulaweng</h1>
     <p class="subtitle">Sistem Informasi Geografis Interaktif Hasil Panen & Potensi Wilayah</p>
 
-    <!-- Tombol Filter Sektor -->
+    <!-- Tombol Filter Sektor (Diperbaiki onclick untuk btn-default) -->
     <div class="controls">
-        <button id="btn-default" onclick="filterSektor">🏠 Batas Desa</button>
+        <button id="btn-default" onclick="filterSektor('Default')">🏠 Batas Desa</button>
         <button id="btn-sawah"   onclick="filterSektor('Sawah')">🌾 Persawahan</button>
         <button id="btn-tambak"  onclick="filterSektor('Tambak')">🦐 Tambak</button>
         <button id="btn-laut"    onclick="filterSektor('Laut')">🌊 Laut</button>
@@ -104,7 +104,7 @@
 
     <!-- Panel Informasi Sektor Aktif -->
     <div class="info-panel" id="info-panel">
-        <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng </span>
+        <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng</span>
     </div>
 
     <!-- Tombol Smart Redirect Ke Google Maps -->
@@ -140,6 +140,7 @@
         // Variable global penampung data & layer
         let rawSektorData = null;      // Data GeoJSON sektor (Sawah, Tambak, dll)
         let batasDesaLayer = null;     // Layer Fog of War + Batas Desa
+        let batasDesaBounds = null;    // Menyimpan bounds/area batas desa untuk reset zoom
         let sektorLayer = null;        // Layer sektor yang sedang aktif dipilih
 
         // Batas raksasa untuk efek Fog of War
@@ -169,9 +170,10 @@
                     fillOpacity: 0.55
                 }).addTo(map);
 
-                // Auto-zoom pas ke area Desa Ulaweng
+                // Auto-zoom pas ke area Desa Ulaweng & simpan area-nya ke variabel global
                 const tempGeoJson = L.geoJSON(data);
-                map.fitBounds(tempGeoJson.getBounds());
+                batasDesaBounds = tempGeoJson.getBounds();
+                map.fitBounds(batasDesaBounds);
             })
             .catch(err => {
                 console.error("Gagal memuat Batas_Desa_Ulaweng.geojson:", err);
@@ -187,15 +189,23 @@
                 console.error("Gagal memuat Sektor_Potensi_Ulaweng.geojson:", err);
             });
 
-        // 4. Fungsi Filter Sektor
+        // 4. Fungsi Filter Sektor & Reset Default
         function filterSektor(sektorTarget) {
+            // Selalu hapus layer sektor yang sedang aktif
             if (sektorLayer) {
                 map.removeLayer(sektorLayer);
                 sektorLayer = null;
             }
 
+            // JIKA MEMILIH RESET / BATAS DESA (DEFAULT)
             if (sektorTarget === 'Default') {
                 document.getElementById('status-filter').innerText = "Batas Desa Ulaweng";
+                // Kembalikan zoom ke area batas desa jika bounds sudah ada
+                if (batasDesaBounds) {
+                    map.fitBounds(batasDesaBounds);
+                } else {
+                    map.setView([ULAWENG_LAT, ULAWENG_LNG], 14);
+                }
                 return;
             }
 
@@ -255,7 +265,7 @@
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
 
-            // Intent Universal Google Maps
+            // Link Pendek Google Maps Desa Ulaweng
             const gmapsUrl = `https://maps.app.goo.gl/TCbFavb3YdjtJb9V8`;
 
             if (isMobile) {
