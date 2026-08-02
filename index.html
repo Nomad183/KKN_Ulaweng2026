@@ -249,21 +249,26 @@
                 map.fitBounds(sektorLayer.getBounds(), { padding: [40, 40] });
             }
         }
+        
+// 5. Fungsi Smart Redirect Google Maps
+// Membuka Google Maps di HP dan tab baru di PC
+function openGoogleMaps() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
 
-        // 5. Fungsi Smart Redirect Google Maps (Membuka App jika di HP, Web jika di PC)
-        function openGoogleMaps() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
-        
-            // Intent Universal Google Maps
-            const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${ULAWENG_LAT},${ULAWENG_LNG}`;
-        
-            if (isMobile) {
-                window.location.href = gmapsUrl;
-            } else {
-                window.open(gmapsUrl, '_blank');
-            }
-        }
+    // Titik koordinat Desa Ulaweng
+    const gmapsUrl =
+        `https://www.google.com/maps?q=${ULAWENG_LAT},${ULAWENG_LNG}`;
+
+    // Jika menggunakan HP
+    if (isMobile) {
+        window.location.href = gmapsUrl;
+    }
+    // Jika menggunakan PC atau laptop
+    else {
+        window.open(gmapsUrl, '_blank');
+    }
+}
     </script>
 </body>
 </html>
