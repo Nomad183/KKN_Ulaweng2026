@@ -65,9 +65,12 @@
             margin-bottom: 20px;
         }
 
-        /* Tombol Redirect Google Maps */
-        .btn-gmaps-web { background-color: #EA4335; color: white; }
-        .btn-gmaps-app { background-color: #34A853; color: white; }
+        /* Tombol Smart Redirect Google Maps */
+        .btn-gmaps-smart {
+            background-color: #4285F4;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
         /* Panel Status Filter */
         .info-panel {
@@ -104,22 +107,23 @@
         <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng (Default)</span>
     </div>
 
-    <!-- Tombol Redirect Ke Google Maps -->
+    <!-- Tombol Smart Redirect Ke Google Maps -->
     <div class="actions">
-        <a href="https://www.google.com/maps/search/?api=1&query=-6.8948,110.6386" target="_blank" class="btn-gmaps btn-gmaps-web">
-            🗺️ Buka di Google Maps Website
-        </a>
-        <a href="geo:-6.8948,110.6386?q=-6.8948,110.6386(Desa+Ulaweng)" class="btn-gmaps btn-gmaps-app">
-            📱 Buka di Aplikasi Google Maps
-        </a>
+        <button class="btn-gmaps btn-gmaps-smart" onclick="openGoogleMaps()">
+            📍 Buka Lokasi Desa Ulaweng di Google Maps
+        </button>
     </div>
 
     <!-- Memuat JS Leaflet -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+        // Koordinat Utama Desa Ulaweng, Samaturu, Kolaka
+        const ULAWENG_LAT = -4.1706245;
+        const ULAWENG_LNG = 121.3698717;
+
         // 1. Inisialisasi Peta & Basemap Satelit
-        const map = L.map('map').setView([-6.8948, 110.6386], 13);
+        const map = L.map('map').setView([ULAWENG_LAT, ULAWENG_LNG], 14);
 
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, USGS, NOAA'
@@ -141,11 +145,10 @@
         // Batas raksasa untuk efek Fog of War
         const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
 
-        // 2. Load File 'batas_desa.geojson' sebagai Tampilan DEFAULT
+        // 2. Load File 'Batas_Desa_Ulaweng.geojson' sebagai Tampilan DEFAULT
         fetch('Batas_Desa_Ulaweng.geojson')
             .then(res => res.json())
             .then(data => {
-                // Mengambil koordinat poligon batas desa
                 const feature = data.features[0];
                 let villageCoords = [];
 
@@ -171,43 +174,39 @@
                 map.fitBounds(tempGeoJson.getBounds());
             })
             .catch(err => {
-                console.error("Gagal memuat batas_desa.geojson:", err);
+                console.error("Gagal memuat Batas_Desa_Ulaweng.geojson:", err);
             });
 
-        // 3. Load File 'sektor_potensi.geojson' ke memori (TIDAK DITAMPILKAN DULU)
+        // 3. Load File 'Sektor_Potensi_Ulaweng.geojson' ke memori
         fetch('Sektor_Potensi_Ulaweng.geojson')
             .then(res => res.json())
             .then(data => {
-                rawSektorData = data; // Hanya disimpan, dipanggil kalau tombol filter diklik
+                rawSektorData = data;
             })
             .catch(err => {
-                console.error("Gagal memuat sektor_potensi.geojson:", err);
+                console.error("Gagal memuat Sektor_Potensi_Ulaweng.geojson:", err);
             });
 
         // 4. Fungsi Filter Sektor
         function filterSektor(sektorTarget) {
-            // Hapus layer sektor sebelumnya jika ada
             if (sektorLayer) {
                 map.removeLayer(sektorLayer);
                 sektorLayer = null;
             }
 
-            // Jika memilih RESET / DEFAULT
             if (sektorTarget === 'Default') {
                 document.getElementById('status-filter').innerText = "Batas Desa Ulaweng (Default)";
                 return;
             }
 
             if (!rawSektorData) {
-                alert("Data sektor belum selesai dimuat atau file sektor_potensi.geojson tidak ditemukan.");
+                alert("Data sektor belum selesai dimuat atau file Sektor_Potensi_Ulaweng.geojson tidak ditemukan.");
                 return;
             }
 
-            // Update status teks
             document.getElementById('status-filter').innerText = 
                 sektorTarget === 'Semua' ? 'Menampilkan Semua Sektor Potensi' : `Menampilkan Sektor ${sektorTarget}`;
 
-            // Filter fitur GeoJSON
             let filteredFeatures = rawSektorData.features;
             if (sektorTarget !== 'Semua') {
                 filteredFeatures = rawSektorData.features.filter(feature => {
@@ -216,7 +215,6 @@
                 });
             }
 
-            // Tampilkan layer sektor yang difilter
             sektorLayer = L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
                 style: function (feature) {
                     const s = feature.properties.sektor || feature.properties.Kategori || '';
@@ -247,9 +245,23 @@
                 }
             }).addTo(map);
 
-            // Zoom otomatis ke lokasi sektor tersebut
             if (sektorLayer.getBounds().isValid()) {
                 map.fitBounds(sektorLayer.getBounds(), { padding: [40, 40] });
+            }
+        }
+
+        // 5. Fungsi Smart Redirect Google Maps (Membuka App jika di HP, Web jika di PC)
+        function openGoogleMaps() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
+
+            // Intent Universal Google Maps
+            const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${ULAWENG_LAT},${ULAWENG_LNG}`;
+
+            if (isMobile) {
+                window.location.href = gmapsUrl;
+            } else {
+                window.open(gmapsUrl, '_blank');
             }
         }
     </script>
