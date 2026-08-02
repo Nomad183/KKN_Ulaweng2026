@@ -254,10 +254,10 @@
         function openGoogleMaps() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
-
+        
             // Intent Universal Google Maps
             const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${ULAWENG_LAT},${ULAWENG_LNG}`;
-
+        
             if (isMobile) {
                 window.location.href = gmapsUrl;
             } else {
