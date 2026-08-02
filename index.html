@@ -91,7 +91,7 @@
 
     <!-- Tombol Filter Sektor -->
     <div class="controls">
-        <button id="btn-default" onclick="filterSektor('Default')">🏠 Batas Desa</button>
+        <button id="btn-default" onclick="filterSektor">🏠 Batas Desa</button>
         <button id="btn-sawah"   onclick="filterSektor('Sawah')">🌾 Persawahan</button>
         <button id="btn-tambak"  onclick="filterSektor('Tambak')">🦐 Tambak</button>
         <button id="btn-laut"    onclick="filterSektor('Laut')">🌊 Laut</button>
@@ -104,7 +104,7 @@
 
     <!-- Panel Informasi Sektor Aktif -->
     <div class="info-panel" id="info-panel">
-        <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng (Default)</span>
+        <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng </span>
     </div>
 
     <!-- Tombol Smart Redirect Ke Google Maps -->
@@ -195,7 +195,7 @@
             }
 
             if (sektorTarget === 'Default') {
-                document.getElementById('status-filter').innerText = "Batas Desa Ulaweng (Default)";
+                document.getElementById('status-filter').innerText = "Batas Desa Ulaweng";
                 return;
             }
 
