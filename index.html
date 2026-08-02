@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Interaktif Desa Ulaweng</title>
+
+    <!-- Memuat CSS Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        h1 { text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        .controls, .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        button, .btn-gmaps {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover, .btn-gmaps:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Warna Tombol Filter */
+        #btn-default { background-color: #455A64; color: white; }
+        #btn-semua   { background-color: #37474F; color: white; }
+        #btn-sawah   { background-color: #2E7D32; color: white; }
+        #btn-tambak  { background-color: #00ACC1; color: white; }
+        #btn-laut    { background-color: #1565C0; color: white; }
+        #btn-kelapa  { background-color: #F57F17; color: white; }
+
+        /* Style Peta */
+        #map {
+            height: 540px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+        }
+
+        /* Tombol Redirect Google Maps */
+        .btn-gmaps-web { background-color: #EA4335; color: white; }
+        .btn-gmaps-app { background-color: #34A853; color: white; }
+
+        /* Panel Status Filter */
+        .info-panel {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌾 Peta Potensi Sektor Desa Ulaweng</h1>
+    <p class="subtitle">Sistem Informasi Geografis Interaktif Hasil Panen & Potensi Wilayah</p>
+
+    <!-- Tombol Filter Sektor -->
+    <div class="controls">
+        <button id="btn-default" onclick="filterSektor('Default')">🏠 Batas Desa</button>
+        <button id="btn-sawah"   onclick="filterSektor('Sawah')">🌾 Persawahan</button>
+        <button id="btn-tambak"  onclick="filterSektor('Tambak')">🦐 Tambak</button>
+        <button id="btn-laut"    onclick="filterSektor('Laut')">🌊 Laut</button>
+        <button id="btn-kelapa"  onclick="filterSektor('Kelapa')">🥥 Kebun Kelapa</button>
+        <button id="btn-semua"   onclick="filterSektor('Semua')">🌐 Tampilkan Semua Sektor</button>
+    </div>
+
+    <!-- Kontainer Peta -->
+    <div id="map"></div>
+
+    <!-- Panel Informasi Sektor Aktif -->
+    <div class="info-panel" id="info-panel">
+        <strong>Status Tampilan:</strong> <span id="status-filter">Batas Desa Ulaweng (Default)</span>
+    </div>
+
+    <!-- Tombol Redirect Ke Google Maps -->
+    <div class="actions">
+        <a href="https://www.google.com/maps/search/?api=1&query=-6.8948,110.6386" target="_blank" class="btn-gmaps btn-gmaps-web">
+            🗺️ Buka di Google Maps Website
+        </a>
+        <a href="geo:-6.8948,110.6386?q=-6.8948,110.6386(Desa+Ulaweng)" class="btn-gmaps btn-gmaps-app">
+            📱 Buka di Aplikasi Google Maps
+        </a>
+    </div>
+
+    <!-- Memuat JS Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. Inisialisasi Peta & Basemap Satelit
+        const map = L.map('map').setView([-6.8948, 110.6386], 13);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, USGS, NOAA'
+        }).addTo(map);
+
+        // Color Palette per sektor
+        const sektorColor = {
+            'Sawah': '#2E7D32',
+            'Tambak': '#00ACC1',
+            'Laut': '#1565C0',
+            'Kelapa': '#F57F17'
+        };
+
+        // Variable global penampung data & layer
+        let rawSektorData = null;      // Data GeoJSON sektor (Sawah, Tambak, dll)
+        let batasDesaLayer = null;     // Layer Fog of War + Batas Desa
+        let sektorLayer = null;        // Layer sektor yang sedang aktif dipilih
+
+        // Batas raksasa untuk efek Fog of War
+        const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
+
+        // 2. Load File 'batas_desa.geojson' sebagai Tampilan DEFAULT
+        fetch('Batas_Desa_Ulaweng.geojson')
+            .then(res => res.json())
+            .then(data => {
+                // Mengambil koordinat poligon batas desa
+                const feature = data.features[0];
+                let villageCoords = [];
+
+                if (feature.geometry.type === 'Polygon') {
+                    villageCoords = feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]);
+                } else if (feature.geometry.type === 'MultiPolygon') {
+                    villageCoords = feature.geometry.coordinates.map(poly => 
+                        poly[0].map(coord => [coord[1], coord[0]])
+                    );
+                }
+
+                // Membuat Masking / Fog of War (Area luar digelapkan, area desa terang)
+                batasDesaLayer = L.polygon([worldBounds, villageCoords], {
+                    color: 'black',        // Garis batas hitam
+                    weight: 2,             // Ketebalan garis
+                    dashArray: '5, 5',     // Garis putus-putus
+                    fillColor: '#000000',   // Warna hitam transparan di luar desa
+                    fillOpacity: 0.55
+                }).addTo(map);
+
+                // Auto-zoom pas ke area Desa Ulaweng
+                const tempGeoJson = L.geoJSON(data);
+                map.fitBounds(tempGeoJson.getBounds());
+            })
+            .catch(err => {
+                console.error("Gagal memuat batas_desa.geojson:", err);
+            });
+
+        // 3. Load File 'sektor_potensi.geojson' ke memori (TIDAK DITAMPILKAN DULU)
+        fetch('Sektor_Potensi_Ulaweng.geojson')
+            .then(res => res.json())
+            .then(data => {
+                rawSektorData = data; // Hanya disimpan, dipanggil kalau tombol filter diklik
+            })
+            .catch(err => {
+                console.error("Gagal memuat sektor_potensi.geojson:", err);
+            });
+
+        // 4. Fungsi Filter Sektor
+        function filterSektor(sektorTarget) {
+            // Hapus layer sektor sebelumnya jika ada
+            if (sektorLayer) {
+                map.removeLayer(sektorLayer);
+                sektorLayer = null;
+            }
+
+            // Jika memilih RESET / DEFAULT
+            if (sektorTarget === 'Default') {
+                document.getElementById('status-filter').innerText = "Batas Desa Ulaweng (Default)";
+                return;
+            }
+
+            if (!rawSektorData) {
+                alert("Data sektor belum selesai dimuat atau file sektor_potensi.geojson tidak ditemukan.");
+                return;
+            }
+
+            // Update status teks
+            document.getElementById('status-filter').innerText = 
+                sektorTarget === 'Semua' ? 'Menampilkan Semua Sektor Potensi' : `Menampilkan Sektor ${sektorTarget}`;
+
+            // Filter fitur GeoJSON
+            let filteredFeatures = rawSektorData.features;
+            if (sektorTarget !== 'Semua') {
+                filteredFeatures = rawSektorData.features.filter(feature => {
+                    const s = feature.properties.sektor || feature.properties.Kategori;
+                    return s && s.toLowerCase() === sektorTarget.toLowerCase();
+                });
+            }
+
+            // Tampilkan layer sektor yang difilter
+            sektorLayer = L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
+                style: function (feature) {
+                    const s = feature.properties.sektor || feature.properties.Kategori || '';
+                    const warna = sektorColor[s] || '#FFFFFF';
+
+                    return {
+                        color: '#000000',
+                        weight: 2,
+                        dashArray: '3, 3',
+                        fillColor: warna,
+                        fillOpacity: 0.5
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const p = feature.properties;
+                    const namaSektor = p.sektor || p.Kategori || 'Sektor';
+                    const namaArea   = p.nama_area || p.Nama || 'Area Tanpa Nama';
+                    const varietas   = p.varietas || p.Varietas || 'Belum diisi';
+
+                    layer.bindPopup(`
+                        <div style="font-family: sans-serif; min-width: 160px;">
+                            <h3 style="margin: 0 0 5px 0; color: ${sektorColor[namaSektor] || '#333'}">${namaSektor}</h3>
+                            <hr style="border: 0; border-top: 1px solid #ccc; margin: 5px 0;">
+                            <b>Lokasi:</b> ${namaArea}<br>
+                            <b>Varietas:</b> ${varietas}
+                        </div>
+                    `);
+                }
+            }).addTo(map);
+
+            // Zoom otomatis ke lokasi sektor tersebut
+            if (sektorLayer.getBounds().isValid()) {
+                map.fitBounds(sektorLayer.getBounds(), { padding: [40, 40] });
+            }
+        }
+    </script>
+</body>
+</html>
