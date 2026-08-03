@@ -88,7 +88,7 @@
         #btn-gps     { background-color: #8E24AA; color: white; }
 
         /* Filter Fasilitas Desa */
-        .btn-fas-filter { background-color: #ffffff; color: #333; border: 1px solid #ccc; }
+        .btn-fas-filter { background-color: #ffffff; color: #333; border: 1px solid #ccc; white-space: nowrap; }
         .btn-fas-filter.active-fas { background-color: #D84315; color: white; border-color: #D84315; }
 
         /* Map Canvas */
@@ -246,6 +246,72 @@
             text-align: center;
             font-size: 14px;
         }
+
+        /* =========================================
+           RESPONSIVE MEDIA QUERIES
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            p.subtitle {
+                font-size: 12px;
+                margin-bottom: 15px;
+            }
+            .btn-mode {
+                padding: 10px 16px;
+                font-size: 13px;
+                flex: 1;
+                text-align: center;
+                min-width: 140px;
+            }
+            #map {
+                height: 420px;
+            }
+            .info-panel {
+                font-size: 13px;
+                padding: 10px 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 17px;
+            }
+            .mode-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .btn-mode {
+                width: 100%;
+            }
+            #map {
+                height: 360px;
+            }
+            /* Membuat filter tombol dapat digeser horizontal agar tidak penuh & berantakan di layar HP kecil */
+            .controls {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .controls::-webkit-scrollbar {
+                height: 4px;
+            }
+            .controls::-webkit-scrollbar-thumb {
+                background: #bbb;
+                border-radius: 2px;
+            }
+            button, .btn-gmaps {
+                padding: 8px 12px;
+                font-size: 12px;
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -366,7 +432,7 @@
     let sektorLayer = null;
     let fasilitasGroup = L.layerGroup();
     let userMarker = null;
-    let accuracyCircle = null; // Penanda lingkaran radius akurasi GPS
+    let accuracyCircle = null;
 
     const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
 
@@ -520,7 +586,6 @@
             const fid = p.fid || p.FID || '';
             const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
             
-            // Evaluasi atribut foto dari GeoJSON
             const namaFoto = p.foto || p.Foto || p.FOTO || '';
             const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
 
@@ -541,7 +606,6 @@
 
             const marker = L.marker([lat, lng], { icon: customIcon });
             
-            // Popup Card dengan gambar & fallback otomatis jika foto error/tidak ada
             marker.bindPopup(`
                 <div class="popup-card">
                     <img src="${imgPath}" alt="${parsed.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
@@ -579,7 +643,6 @@
             
             document.getElementById('status-filter').innerText = "Menampilkan Semua Fasilitas & Point of Interest Desa Ulaweng";
             
-            // Auto Zoom to Bounds Fasilitas
             if (rawFasilitasData) {
                 const tempFasitasGeoJSON = L.geoJSON(rawFasilitasData);
                 if (tempFasitasGeoJSON.getBounds().isValid()) {
@@ -647,7 +710,6 @@
             }
         }).addTo(map);
 
-        // Auto Zoom to Bounds Sektor
         if (sektorLayer.getBounds().isValid()) {
             map.fitBounds(sektorLayer.getBounds(), { padding: [40, 40], maxZoom: 16 });
         }
@@ -664,7 +726,6 @@
             ? "Menampilkan Semua Fasilitas & Point of Interest Desa Ulaweng" 
             : `Menampilkan Fasilitas Kategori: ${katTarget}`;
 
-        // Auto Zoom to Bounds Fasilitas Terkait
         if (fasilitasGroup.getLayers().length > 0) {
             const bounds = L.featureGroup(fasilitasGroup.getLayers()).getBounds();
             if (bounds.isValid()) {
@@ -683,27 +744,23 @@
         const statusEl = document.getElementById('status-filter');
         statusEl.innerText = "⏳ Sedang mengunci lokasi GPS presisi tinggi...";
 
-        // Konfigurasi Geolocation paling presisi
         const geoOptions = {
-            enableHighAccuracy: true, // Memaksa penggunaan Hardware GPS bawaan HP/Laptop
-            timeout: 15000,            // Menunggu respon sinyal GPS hingga 15 detik
-            maximumAge: 0              // Menghindari penggunaan cache lokasi lama
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
         };
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-                const accuracy = position.coords.accuracy; // Akurasi dalam satuan meter
+                const accuracy = position.coords.accuracy;
 
-                // Bersihkan marker & lingkaran lama jika ada
                 if (userMarker) map.removeLayer(userMarker);
                 if (accuracyCircle) map.removeLayer(accuracyCircle);
 
-                // Tambahkan Custom Marker Lokasi Saya
                 userMarker = L.marker([lat, lng], { icon: userLocationIcon }).addTo(map);
                 
-                // Tambahkan Lingkaran Transparan Penanda Radius Toleransi Akurasi
                 accuracyCircle = L.circle([lat, lng], {
                     radius: accuracy,
                     color: '#8E24AA',
@@ -719,12 +776,9 @@
                     </div>
                 `).openPopup();
 
-                // Zoom otomatis menyesuaikan area akurasi
                 if (accuracy > 100) {
-                    // Jika akurasi rendah (>100m), sesuaikan zoom ke radius lingkaran akurasi
                     map.fitBounds(accuracyCircle.getBounds(), { padding: [20, 20] });
                 } else {
-                    // Jika akurasi presisi (<100m), fokus langsung ke titik koordinat
                     map.flyTo([lat, lng], 17, { duration: 1.5 });
                 }
 
