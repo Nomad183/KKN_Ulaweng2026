@@ -100,7 +100,7 @@
             margin-bottom: 15px;
         }
 
-        /* Dynamic Legend */
+        /* Dynamic Legend (Default Desktop) */
         .info.legend {
             background: rgba(255, 255, 255, 0.96);
             padding: 12px 16px;
@@ -275,6 +275,28 @@
                 font-size: 13px;
                 padding: 10px 14px;
             }
+
+            /* Penyesuaian Legenda di HP agar Lebih Kompak & Kecil */
+            .info.legend {
+                padding: 8px 10px;
+                font-size: 10.5px;
+                min-width: 120px;
+                max-height: 180px;
+                line-height: 15px;
+            }
+            .info.legend h4 {
+                font-size: 11px;
+                margin-bottom: 4px;
+                padding-bottom: 2px;
+            }
+            .legend-color {
+                width: 10px;
+                height: 10px;
+                margin-right: 5px;
+            }
+            .legend-item {
+                margin-bottom: 2px;
+            }
         }
 
         @media screen and (max-width: 480px) {
@@ -291,7 +313,7 @@
             #map {
                 height: 360px;
             }
-            /* Membuat filter tombol dapat digeser horizontal agar tidak penuh & berantakan di layar HP kecil */
+            /* Membuat filter tombol dapat digeser horizontal */
             .controls {
                 justify-content: flex-start;
                 overflow-x: auto;
