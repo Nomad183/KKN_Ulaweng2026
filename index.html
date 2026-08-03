@@ -100,27 +100,42 @@
             margin-bottom: 15px;
         }
 
-        /* Dynamic Legend (Default Desktop) */
+        /* Dynamic Legend (Collapsible Mobile Friendly) */
         .info.legend {
             background: rgba(255, 255, 255, 0.96);
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 12px;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 8px;
-            line-height: 20px;
             color: #333;
-            max-height: 320px;
-            overflow-y: auto;
             min-width: 180px;
         }
-        .info.legend h4 {
-            margin: 0 0 8px 0;
+        .legend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            border-bottom: 2px solid #ddd;
+        }
+        .legend-header h4 {
+            margin: 0;
             font-size: 13px;
             color: #111;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+        .legend-body-content {
+            max-height: 250px;
+            overflow-y: auto;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .legend-body-content.closed {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
         }
         .legend-item {
             display: flex;
@@ -276,18 +291,14 @@
                 padding: 10px 14px;
             }
 
-            /* Penyesuaian Legenda di HP agar Lebih Kompak & Kecil */
+            /* Penyesuaian Legenda di HP */
             .info.legend {
                 padding: 8px 10px;
                 font-size: 10.5px;
                 min-width: 120px;
-                max-height: 180px;
-                line-height: 15px;
             }
-            .info.legend h4 {
+            .legend-header h4 {
                 font-size: 11px;
-                margin-bottom: 4px;
-                padding-bottom: 2px;
             }
             .legend-color {
                 width: 10px;
@@ -313,7 +324,6 @@
             #map {
                 height: 360px;
             }
-            /* Membuat filter tombol dapat digeser horizontal */
             .controls {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -458,19 +468,39 @@
 
     const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
 
-    // Inisialisasi Control Legenda Dinamis
+    // Inisialisasi Control Legenda Dinamis dengan Tombol Close/Open
     const legend = L.control({ position: 'bottomright' });
     legend.onAdd = function () {
         const div = L.DomUtil.create('div', 'info legend');
-        div.id = 'legend-content';
+        div.innerHTML = `
+            <div class="legend-header" onclick="toggleLegendCollapse()">
+                <h4 id="legend-title">Legenda</h4>
+                <span id="legend-toggle-icon" style="font-size: 12px; font-weight: bold;">▼</span>
+            </div>
+            <div id="legend-body" class="legend-body-content"></div>
+        `;
+        L.DomEvent.disableClickPropagation(div);
         return div;
     };
     legend.addTo(map);
 
+    function toggleLegendCollapse() {
+        const body = document.getElementById('legend-body');
+        const icon = document.getElementById('legend-toggle-icon');
+        body.classList.toggle('closed');
+        if (body.classList.contains('closed')) {
+            icon.textContent = '▲';
+        } else {
+            icon.textContent = '▼';
+        }
+    }
+
     function updateLegend() {
-        const legendDiv = document.getElementById('legend-content');
+        const bodyDiv = document.getElementById('legend-body');
+        if (!bodyDiv) return;
+
+        let html = '';
         if (activeMode === 'potensi') {
-            let html = '<h4>Legenda Sektor</h4>';
             for (let key in sektorColor) {
                 html += `
                     <div class="legend-item">
@@ -483,9 +513,7 @@
                     <span class="legend-color" style="background:rgba(0,0,0,0.55); border:1px solid #000;"></span>
                     <span>Luar Batas Desa</span>
                 </div>`;
-            legendDiv.innerHTML = html;
         } else {
-            let html = '<h4>Legenda Fasilitas</h4>';
             for (let kat in katColor) {
                 html += `
                     <div class="legend-item">
@@ -493,8 +521,8 @@
                         <span>${kat}</span>
                     </div>`;
             }
-            legendDiv.innerHTML = html;
         }
+        bodyDiv.innerHTML = html;
     }
 
     // Processing Masking GeoJSON Inverted MultiPolygon / Polygon
