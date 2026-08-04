@@ -31,7 +31,7 @@
         }
 
         .btn-mode {
-            padding: 12px 24px;
+            padding: 12px 20px;
             font-size: 15px;
             border-radius: 8px;
             border: 2px solid transparent;
@@ -49,6 +49,7 @@
 
         #mode-potensi { background-color: #2E7D32; color: white; }
         #mode-fasilitas { background-color: #D84315; color: white; }
+        #mode-umkm { background-color: #E65100; color: white; }
 
         /* Filter Controls Container */
         .controls, .actions {
@@ -85,11 +86,24 @@
         #btn-tambak  { background-color: #00ACC1; color: white; }
         #btn-laut    { background-color: #1565C0; color: white; }
         #btn-kelapa  { background-color: #F57F17; color: white; }
-        #btn-gps     { background-color: #8E24AA; color: white; }
 
-        /* Filter Fasilitas Desa */
-        .btn-fas-filter { background-color: #ffffff; color: #333; border: 1px solid #ccc; white-space: nowrap; }
-        .btn-fas-filter.active-fas { background-color: #D84315; color: white; border-color: #D84315; }
+        /* Filter Fasilitas & UMKM Desa */
+        .btn-fas-filter, .btn-umkm-filter { 
+            background-color: #ffffff; 
+            color: #333; 
+            border: 1px solid #ccc; 
+            white-space: nowrap; 
+        }
+        .btn-fas-filter.active-fas { 
+            background-color: #D84315; 
+            color: white; 
+            border-color: #D84315; 
+        }
+        .btn-umkm-filter.active-umkm { 
+            background-color: #E65100; 
+            color: white; 
+            border-color: #E65100; 
+        }
 
         /* Map Canvas */
         #map {
@@ -239,12 +253,36 @@
             margin-bottom: 6px;
         }
         .popup-card p {
-            margin: 0;
+            margin: 0 0 8px 0;
             font-size: 12px;
             color: #666;
         }
 
-        /* Status & Action Bar */
+        /* Tombol Tunjukkan Jalan di Popup */
+        .btn-route {
+            display: inline-block;
+            width: 100%;
+            padding: 7px 10px;
+            background-color: #25D366;
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: background 0.2s ease;
+        }
+        .btn-route:hover {
+            background-color: #1EBE5D;
+        }
+
+        /* Bottom Action Buttons */
+        .btn-gps-bottom {
+            background-color: #8E24AA;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
         .btn-gmaps-smart {
             background-color: #4285F4;
             color: white;
@@ -262,68 +300,31 @@
             font-size: 14px;
         }
 
-        /* =========================================
-           RESPONSIVE MEDIA QUERIES
-           ========================================= */
+        /* Responsive Media Queries */
         @media screen and (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 20px;
-            }
-            p.subtitle {
-                font-size: 12px;
-                margin-bottom: 15px;
-            }
+            body { padding: 12px; }
+            h1 { font-size: 20px; }
+            p.subtitle { font-size: 12px; margin-bottom: 15px; }
             .btn-mode {
-                padding: 10px 16px;
-                font-size: 13px;
+                padding: 10px 14px;
+                font-size: 12.5px;
                 flex: 1;
                 text-align: center;
-                min-width: 140px;
-            }
-            #map {
-                height: 420px;
-            }
-            .info-panel {
-                font-size: 13px;
-                padding: 10px 14px;
-            }
-
-            /* Penyesuaian Legenda di HP */
-            .info.legend {
-                padding: 8px 10px;
-                font-size: 10.5px;
                 min-width: 120px;
             }
-            .legend-header h4 {
-                font-size: 11px;
-            }
-            .legend-color {
-                width: 10px;
-                height: 10px;
-                margin-right: 5px;
-            }
-            .legend-item {
-                margin-bottom: 2px;
-            }
+            #map { height: 420px; }
+            .info-panel { font-size: 13px; padding: 10px 14px; }
+            .info.legend { padding: 8px 10px; font-size: 10.5px; min-width: 120px; }
+            .legend-header h4 { font-size: 11px; }
+            .legend-color { width: 10px; height: 10px; margin-right: 5px; }
+            .legend-item { margin-bottom: 2px; }
         }
 
         @media screen and (max-width: 480px) {
-            h1 {
-                font-size: 17px;
-            }
-            .mode-container {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .btn-mode {
-                width: 100%;
-            }
-            #map {
-                height: 360px;
-            }
+            h1 { font-size: 17px; }
+            .mode-container { flex-direction: column; gap: 8px; }
+            .btn-mode { width: 100%; }
+            #map { height: 360px; }
             .controls {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -331,30 +332,24 @@
                 flex-wrap: nowrap;
                 -webkit-overflow-scrolling: touch;
             }
-            .controls::-webkit-scrollbar {
-                height: 4px;
-            }
-            .controls::-webkit-scrollbar-thumb {
-                background: #bbb;
-                border-radius: 2px;
-            }
-            button, .btn-gmaps {
-                padding: 8px 12px;
-                font-size: 12px;
-                flex-shrink: 0;
-            }
+            .controls::-webkit-scrollbar { height: 4px; }
+            .controls::-webkit-scrollbar-thumb { background: #bbb; border-radius: 2px; }
+            button, .btn-gmaps { padding: 8px 12px; font-size: 12px; flex-shrink: 0; }
+            .actions { flex-direction: column; width: 100%; }
+            .actions button, .actions .btn-gmaps { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <h1>🗺️ Portal Geografis Desa Ulaweng</h1>
-<p class="subtitle">Sistem Informasi Geografis Multi-Layer Presisi Tinggi (Potensi & Fasilitas Desa)</p>
+<p class="subtitle">Sistem Informasi Geografis Multi-Layer Presisi Tinggi (Potensi, Fasilitas & UMKM Desa)</p>
 
 <!-- Switcher Mode Utama -->
 <div class="mode-container">
     <button id="mode-potensi" class="btn-mode active" onclick="setMode('potensi')">🌾 Peta Potensi Sektor</button>
     <button id="mode-fasilitas" class="btn-mode" onclick="setMode('fasilitas')">🏛️ Peta Fasilitas & POI Desa</button>
+    <button id="mode-umkm" class="btn-mode" onclick="setMode('umkm')">🏪 Peta UMKM Desa</button>
 </div>
 
 <!-- Sub-Filter Mode Potensi Sektor -->
@@ -365,7 +360,6 @@
     <button id="btn-laut"    onclick="filterSektor('Laut')">🌊 Laut</button>
     <button id="btn-kelapa"  onclick="filterSektor('Kelapa')">🥥 Kebun Kelapa</button>
     <button id="btn-semua"   onclick="filterSektor('Semua')">🌐 Semua Sektor</button>
-    <button id="btn-gps"     onclick="cariLokasiSaya()">📍 Lokasi Saya</button>
 </div>
 
 <!-- Sub-Filter Mode Fasilitas Desa -->
@@ -379,6 +373,15 @@
     <button class="btn-fas-filter" onclick="filterFasilitas('Infrastruktur', this)">🚪 Infrastruktur & Ikon</button>
 </div>
 
+<!-- Sub-Filter Mode UMKM Desa -->
+<div class="controls" id="umkm-controls" style="display: none;">
+    <button class="btn-umkm-filter active-umkm" onclick="filterUMKM('Semua', this)">Semua UMKM</button>
+    <button class="btn-umkm-filter" onclick="filterUMKM('Kuliner', this)">🍲 Makanan & Kuliner</button>
+    <button class="btn-umkm-filter" onclick="filterUMKM('Sembako', this)">🛒 Toko & Sembako</button>
+    <button class="btn-umkm-filter" onclick="filterUMKM('Jasa', this)">🔧 Jasa & Bengkel</button>
+    <button class="btn-umkm-filter" onclick="filterUMKM('Kerajinan', this)">🧵 Kerajinan & Hasil Desa</button>
+</div>
+
 <!-- Container Peta -->
 <div id="map"></div>
 
@@ -387,8 +390,11 @@
     <strong>Status Tampilan:</strong> <span id="status-filter">Mode Peta Potensi Sektor (Batas Desa)</span>
 </div>
 
-<!-- Direct Action Button -->
+<!-- Direct Action Buttons (Setara & Berdampingan) -->
 <div class="actions">
+    <button class="btn-gps-bottom" onclick="cariLokasiSaya()">
+        📍 Lokasi Saya
+    </button>
     <button class="btn-gmaps btn-gmaps-smart" onclick="openGoogleMaps()">
         📍 Buka Lokasi Desa Ulaweng di Google Maps
     </button>
@@ -401,6 +407,25 @@
     // Koordinat Utama Desa Ulaweng
     const ULAWENG_LAT = -3.952509446024583;
     const ULAWENG_LNG = 121.33541203412234;
+
+    // Data Dummy UMKM Desa Ulaweng (15 Lokasi)
+    const umkmDataList = [
+        { id: 1, nama: "Warung Makan Berkah", kat: "Kuliner", icon: "🍲", lat: -3.951500, lng: 121.336100, foto: "warung_berkah.jpg", pemilik: "Ibu Maryam" },
+        { id: 2, nama: "Toko Sembako Ulaweng", kat: "Sembako", icon: "🛒", lat: -3.952800, lng: 121.334500, foto: "toko_sembako.jpg", pemilik: "Pak Haji Ahmad" },
+        { id: 3, nama: "Bengkel Motor Jaya", kat: "Jasa", icon: "🔧", lat: -3.953200, lng: 121.336800, foto: "bengkel_jaya.jpg", pemilik: "Mas Budi" },
+        { id: 4, nama: "Kerajinan Anyaman Pandan", kat: "Kerajinan", icon: "🧵", lat: -3.950800, lng: 121.333200, foto: "kerajinan_pandan.jpg", pemilik: "Kelompok Ibu PKK" },
+        { id: 5, nama: "Warung Kopi Pesisir", kat: "Kuliner", icon: "☕", lat: -3.954100, lng: 121.337500, foto: "warkop_pesisir.jpg", pemilik: "Bang Udin" },
+        { id: 6, nama: "Kios Pulsa & PPOB Rian", kat: "Jasa", icon: "📱", lat: -3.952100, lng: 121.335200, foto: "kios_rian.jpg", pemilik: "Rian" },
+        { id: 7, nama: "Depot Air Minum Isi Ulang", kat: "Sembako", icon: "💧", lat: -3.953500, lng: 121.333900, foto: "depot_air.jpg", pemilik: "Pak Herman" },
+        { id: 8, nama: "Penjual Ikan Segar Pak Amir", kat: "Sembako", icon: "🐟", lat: -3.954800, lng: 121.338100, foto: "ikan_segar.jpg", pemilik: "Pak Amir" },
+        { id: 9, nama: "Pengolahan Minyak Kelapa Murni (VCO)", kat: "Kerajinan", icon: "🥥", lat: -3.949900, lng: 121.332500, foto: "vco_ulaweng.jpg", pemilik: "Ibu Salma" },
+        { id: 10, nama: "Bakso & Mie Ayam Barokah", kat: "Kuliner", icon: "🍜", lat: -3.951800, lng: 121.335900, foto: "bakso_barokah.jpg", pemilik: "Mas Joko" },
+        { id: 11, nama: "Pangkas Rambut Mas Bro", kat: "Jasa", icon: "💈", lat: -3.952500, lng: 121.336300, foto: "pangkas_rambut.jpg", pemilik: "MasBro" },
+        { id: 12, nama: "Kios Sayur & Bumbu Dapur Ibu Sinar", kat: "Sembako", icon: "🥬", lat: -3.953000, lng: 121.334100, foto: "kios_sayur.jpg", pemilik: "Ibu Sinar" },
+        { id: 13, nama: "Anugerah Tailor / Penjahit", kat: "Jasa", icon: "🪡", lat: -3.951200, lng: 121.334800, foto: "tailor.jpg", pemilik: "Ibu Farida" },
+        { id: 14, nama: "Aneka Olahan Bandeng Cabut Duri", kat: "Kuliner", icon: "🐟", lat: -3.954200, lng: 121.336000, foto: "bandeng_ulaweng.jpg", pemilik: "Kelompok Tani Tambak" },
+        { id: 15, nama: "Kios Pertamini Desa", kat: "Jasa", icon: "⛽", lat: -3.953800, lng: 121.335000, foto: "pertamini.jpg", pemilik: "Pak Muis" }
+    ];
 
     // 1. Basemaps Presisi Tinggi
     const satelitLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -444,6 +469,14 @@
         'Ikon Desa': '#8E24AA'
     };
 
+    // Skema Warna Kategori UMKM
+    const umkmColor = {
+        'Kuliner': '#D84315',
+        'Sembako': '#F57F17',
+        'Jasa': '#0288D1',
+        'Kerajinan': '#7B1FA2'
+    };
+
     // Icon Custom untuk Marker Lokasi Saya
     const userLocationIcon = L.divIcon({
         className: 'user-location-container',
@@ -463,6 +496,7 @@
     let batasDesaBounds = null;
     let sektorLayer = null;
     let fasilitasGroup = L.layerGroup();
+    let umkmGroup = L.layerGroup();
     let userMarker = null;
     let accuracyCircle = null;
 
@@ -513,11 +547,19 @@
                     <span class="legend-color" style="background:rgba(0,0,0,0.55); border:1px solid #000;"></span>
                     <span>Luar Batas Desa</span>
                 </div>`;
-        } else {
+        } else if (activeMode === 'fasilitas') {
             for (let kat in katColor) {
                 html += `
                     <div class="legend-item">
                         <span class="legend-color" style="background:${katColor[kat]}"></span>
+                        <span>${kat}</span>
+                    </div>`;
+            }
+        } else if (activeMode === 'umkm') {
+            for (let kat in umkmColor) {
+                html += `
+                    <div class="legend-item">
+                        <span class="legend-color" style="background:${umkmColor[kat]}"></span>
                         <span>${kat}</span>
                     </div>`;
             }
@@ -567,18 +609,12 @@
         .then(data => { rawSektorData = data; })
         .catch(err => console.error("Gagal memuat Sektor_Potensi_Ulaweng.geojson:", err));
 
-    // 3. Memuat POI_Desa_Ulaweng.geojson dari QGIS
+    // 3. Memuat POI_Desa_Ulaweng.geojson
     fetch('POI_Desa_Ulaweng.geojson')
         .then(res => res.json())
-        .then(data => { 
-            rawFasilitasData = data; 
-            if (activeMode === 'fasilitas') {
-                renderFasilitasMarkers('Semua');
-            }
-        })
+        .then(data => { rawFasilitasData = data; })
         .catch(err => console.error("Gagal memuat POI_Desa_Ulaweng.geojson:", err));
 
-    // Ekstrak Kategori & Ikon otomatis dari atribut Keterangan QGIS
     function parseKeterangan(keteranganText) {
         const text = (keteranganText || '').trim();
         const textLower = text.toLowerCase();
@@ -618,24 +654,20 @@
         };
     }
 
-    // Render Marker Fasilitas Desa dari GeoJSON QGIS
+    // Render Marker Fasilitas Desa dari GeoJSON
     function renderFasilitasMarkers(filterKategori = 'Semua') {
         fasilitasGroup.clearLayers();
 
-        if (!rawFasilitasData) {
-            console.warn("Data POI_Desa_Ulaweng.geojson belum siap/tersedia.");
-            return;
-        }
+        if (!rawFasilitasData) return;
 
         rawFasilitasData.features.forEach(feature => {
             const p = feature.properties;
-            const coords = feature.geometry.coordinates; // [lng, lat]
+            const coords = feature.geometry.coordinates;
             const lat = coords[1];
             const lng = coords[0];
 
             const fid = p.fid || p.FID || '';
             const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
-            
             const namaFoto = p.foto || p.Foto || p.FOTO || '';
             const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
 
@@ -654,17 +686,54 @@
                 iconAnchor: [16, 16]
             });
 
+            const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
             const marker = L.marker([lat, lng], { icon: customIcon });
-            
             marker.bindPopup(`
                 <div class="popup-card">
                     <img src="${imgPath}" alt="${parsed.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
                     <span class="badge" style="background:${markerBgColor}">${parsed.kat}</span>
                     <h3>${parsed.nama}</h3>
                     <p><b>Desa Ulaweng</b> ${fid ? `(ID: ${fid})` : ''}</p>
+                    <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
                 </div>
             `);
             fasilitasGroup.addLayer(marker);
+        });
+    }
+
+    // Render Marker UMKM Desa
+    function renderUMKMMarkers(filterKategori = 'Semua') {
+        umkmGroup.clearLayers();
+
+        umkmDataList.forEach(item => {
+            if (filterKategori !== 'Semua' && item.kat !== filterKategori) {
+                return;
+            }
+
+            const markerBgColor = umkmColor[item.kat] || '#E65100';
+            const imgPath = item.foto ? `images/umkm/${item.foto}` : 'images/default.jpeg';
+
+            const customIcon = L.divIcon({
+                className: 'custom-poi-container',
+                html: `<div class="custom-poi-marker" style="background-color: ${markerBgColor}; width: 32px; height: 32px;">${item.icon}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+
+            const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+
+            const marker = L.marker([item.lat, item.lng], { icon: customIcon });
+            marker.bindPopup(`
+                <div class="popup-card">
+                    <img src="${imgPath}" alt="${item.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
+                    <span class="badge" style="background:${markerBgColor}">UMKM - ${item.kat}</span>
+                    <h3>${item.nama}</h3>
+                    <p><b>Pemilik:</b> ${item.pemilik}</p>
+                    <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
+                </div>
+            `);
+            umkmGroup.addLayer(marker);
         });
     }
 
@@ -674,19 +743,26 @@
 
         document.getElementById('mode-potensi').classList.toggle('active', mode === 'potensi');
         document.getElementById('mode-fasilitas').classList.toggle('active', mode === 'fasilitas');
+        document.getElementById('mode-umkm').classList.toggle('active', mode === 'umkm');
 
         const potensiControls = document.getElementById('potensi-controls');
         const fasilitasControls = document.getElementById('fasilitas-controls');
+        const umkmControls = document.getElementById('umkm-controls');
         
+        // Riset Tampilan Layer
+        if (sektorLayer) map.removeLayer(sektorLayer);
+        map.removeLayer(fasilitasGroup);
+        map.removeLayer(umkmGroup);
+
         if (mode === 'potensi') {
             potensiControls.style.display = 'flex';
             fasilitasControls.style.display = 'none';
-            map.removeLayer(fasilitasGroup);
+            umkmControls.style.display = 'none';
             filterSektor('Default');
-        } else {
+        } else if (mode === 'fasilitas') {
             potensiControls.style.display = 'none';
             fasilitasControls.style.display = 'flex';
-            if (sektorLayer) map.removeLayer(sektorLayer);
+            umkmControls.style.display = 'none';
             
             renderFasilitasMarkers('Semua');
             fasilitasGroup.addTo(map);
@@ -700,6 +776,22 @@
                 }
             } else if (batasDesaBounds) {
                 map.fitBounds(batasDesaBounds, { padding: [20, 20] });
+            }
+        } else if (mode === 'umkm') {
+            potensiControls.style.display = 'none';
+            fasilitasControls.style.display = 'none';
+            umkmControls.style.display = 'flex';
+
+            renderUMKMMarkers('Semua');
+            umkmGroup.addTo(map);
+
+            document.getElementById('status-filter').innerText = "Menampilkan Semua UMKM Desa Ulaweng";
+
+            if (umkmGroup.getLayers().length > 0) {
+                const bounds = L.featureGroup(umkmGroup.getLayers()).getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
             }
         }
 
@@ -765,7 +857,7 @@
         }
     }
 
-    // Sub-Filter Fasilitas Desa dengan Auto Zoom
+    // Sub-Filter Fasilitas Desa
     function filterFasilitas(katTarget, btnElement) {
         const buttons = document.querySelectorAll('.btn-fas-filter');
         buttons.forEach(btn => btn.classList.remove('active-fas'));
@@ -784,7 +876,26 @@
         }
     }
 
-    // Geolokasi GPS Akurasi Tinggi (HTML5 Geolocation API)
+    // Sub-Filter UMKM Desa
+    function filterUMKM(katTarget, btnElement) {
+        const buttons = document.querySelectorAll('.btn-umkm-filter');
+        buttons.forEach(btn => btn.classList.remove('active-umkm'));
+        btnElement.classList.add('active-umkm');
+
+        renderUMKMMarkers(katTarget);
+        document.getElementById('status-filter').innerText = katTarget === 'Semua' 
+            ? "Menampilkan Semua UMKM Desa Ulaweng" 
+            : `Menampilkan UMKM Kategori: ${katTarget}`;
+
+        if (umkmGroup.getLayers().length > 0) {
+            const bounds = L.featureGroup(umkmGroup.getLayers()).getBounds();
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 17 });
+            }
+        }
+    }
+
+    // Geolokasi GPS Akurasi Tinggi
     function cariLokasiSaya() {
         if (!navigator.geolocation) {
             alert("Browser Anda tidak mendukung Geolocation.");
