@@ -530,7 +530,7 @@
             const fid = p.fid || p.FID || '';
             const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
             const namaFoto = p.foto || p.Foto || p.FOTO || '';
-            const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
+            const imgPath = namaFoto ? `umkm/${namaFoto}` : 'images/default.jpeg';
 
             const parsed = parseKeterangan(rawKet);
 
@@ -567,20 +567,28 @@
     function renderUMKMMarkers() {
     umkmGroup.clearLayers();
 
-    // Daftar variasi icon UMKM yang akan dipakai berurutan
-    const iconsList = ["🏪", "🛍️", "🏬", "🛒"];
-    const markerBgColor = "#E65100"; // Warna tema marker UMKM
+    // Palet Icon dan Warna yang berputar seragam setiap 2 item
+    const iconsList  = ["🏪", "🛍️", "🏬", "🛒"];
+    const colorsList = ["#E65100", "#D84315", "#0288D1", "#7B1FA2"];
 
     umkmDataList.forEach((item, index) => {
-        // Logika rotasi icon setiap 2 item
-        const iconIndex = Math.floor(index / 2) % iconsList.length;
-        const selectedIcon = iconsList[iconIndex];
+        // Logika pola 2 item (0-1: Ke-1, 2-3: Ke-2, dst.)
+        const patternIndex = Math.floor(index / 2) % iconsList.length;
+        const selectedIcon  = iconsList[patternIndex];
+        const selectedColor = colorsList[patternIndex];
 
-        const imgPath = item.foto ? `images/umkm/${item.foto}` : 'images/default.jpeg';
+        // Validasi & Sanitasi Path Foto UMKM
+        let fotoName = item.foto || '';
+        if (fotoName && !fotoName.includes('.')) {
+            fotoName += '.jpg'; // Menambahkan ekstensi .jpg jika terlewat
+        }
+        
+        const imgPath = fotoName ? `images/umkm/${fotoName}` : 'images/default.jpeg';
 
+        // Marker Icon dengan warna & emoji yang sesuai urutan
         const customIcon = L.divIcon({
             className: 'custom-poi-container',
-            html: `<div class="custom-poi-marker" style="background-color: ${markerBgColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
+            html: `<div class="custom-poi-marker" style="background-color: ${selectedColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
             iconSize: [32, 32],
             iconAnchor: [16, 16]
         });
@@ -591,7 +599,7 @@
         marker.bindPopup(`
             <div class="popup-card">
                 <img src="${imgPath}" alt="${item.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
-                <span class="badge" style="background:${markerBgColor}">UMKM Desa</span>
+                <span class="badge" style="background:${selectedColor}">UMKM Desa</span>
                 <h3>${item.nama}</h3>
                 <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
             </div>
