@@ -13,76 +13,65 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 10px;
+            padding: 20px;
             background-color: #f4f7f6;
             color: #333;
         }
-        h1 { 
-            text-align: center; 
-            color: #1b5e20; 
-            font-size: 20px; 
-            margin: 10px 0 5px 0; 
-        }
-        p.subtitle { 
-            text-align: center; 
-            color: #666; 
-            font-size: 13px; 
-            margin-top: 0; 
-            margin-bottom: 15px; 
-        }
+        h1 { text-align: center; color: #1b5e20; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
 
         .app-container {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .sidebar {
-            width: 320px;
+            width: 360px;
             background: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 550px;
+            gap: 15px;
+            height: 580px;
             overflow-y: auto;
         }
 
         .sidebar h3 {
-            margin: 5px 0 0 0;
+            margin-top: 0;
             color: #1b5e20;
-            font-size: 14px;
+            font-size: 16px;
             border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 6px;
+            padding-bottom: 8px;
         }
 
         /* Tombol Kembali ke Penduduk */
         .btn-back {
             display: block;
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px 14px;
             background-color: #455A64;
             color: white;
             text-align: center;
             text-decoration: none;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 13px;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.2s;
         }
         .btn-back:hover {
             background-color: #37474F;
+            transform: translateY(-2px);
         }
 
         .search-box {
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px 14px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -93,18 +82,17 @@
         .dusun-filters {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .btn-dusun {
-            padding: 9px 12px;
+            padding: 10px 14px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
             color: #333;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
             text-align: left;
             transition: all 0.2s ease;
         }
@@ -121,7 +109,7 @@
         }
 
         .info-count {
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
             background: #f1f8e9;
             padding: 8px;
@@ -129,55 +117,76 @@
             text-align: center;
         }
 
+        /* Daftar List Penduduk di Sidebar */
+        .resident-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .resident-item {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .resident-item:hover {
+            background-color: #f1f8e9;
+            border-color: #2E7D32;
+        }
+
+        .resident-item h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: #1b5e20;
+        }
+
+        .resident-item p {
+            margin: 0;
+            font-size: 12px;
+            color: #555;
+        }
+
         #map {
             flex: 1;
-            height: 550px;
+            height: 580px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
 
         .popup-card {
             font-family: 'Segoe UI', sans-serif;
             text-align: center;
-            min-width: 150px;
+            min-width: 160px;
         }
         .popup-card h4 {
-            margin: 0 0 4px 0;
+            margin: 0 0 5px 0;
             color: #1b5e20;
-            font-size: 14px;
         }
         .popup-card p {
             margin: 0;
-            font-size: 11px;
+            font-size: 12px;
             color: #555;
         }
 
-        /* Responsif HP / Mobile */
         @media screen and (max-width: 768px) {
-            body { padding: 5px; }
-            h1 { font-size: 17px; }
-            p.subtitle { font-size: 11px; margin-bottom: 10px; }
-            .app-container { 
-                flex-direction: column; 
-                gap: 10px;
-            }
-            .sidebar { 
-                width: 100%; 
-                max-height: 280px; 
-                padding: 12px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-            }
-            #map { 
-                height: 400px; 
-                width: 100%;
-            }
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; max-height: 450px; }
+            #map { height: 420px; }
         }
     </style>
 </head>
 <body>
 
     <h1>🗺️ Map Penduduk Desa Ulaweng</h1>
-    <p class="subtitle">Visualisasi Batas Wilayah dan Filter Kependudukan per Dusun</p>
+    <p class="subtitle">Visualisasi Batas Wilayah dan Daftar Lokasi Penduduk per Dusun</p>
 
     <div class="app-container">
         <div class="sidebar">
@@ -197,6 +206,11 @@
             </div>
 
             <div class="info-count" id="info-count">Memuat data penduduk...</div>
+
+            <h3>📋 Daftar Lokasi</h3>
+            <div class="resident-list" id="resident-list">
+                <!-- Daftar kartu penduduk akan dimuat secara dinamis via JavaScript -->
+            </div>
         </div>
 
         <div id="map"></div>
@@ -224,6 +238,7 @@
         let batasDesaLayer = null;
         let batasDesaBounds = null;
         let rawPendudukData = [];
+        let markerMap = {}; // Menyimpan referensi marker berdasarkan ID/index
         let pendudukLayerGroup = L.layerGroup().addTo(map);
 
         let activeDusun = 'Semua';
@@ -266,18 +281,26 @@
             .then(res => res.json())
             .then(data => {
                 rawPendudukData = data;
-                renderMarkers(rawPendudukData);
+                renderData(rawPendudukData);
             })
             .catch(err => {
                 console.error("Gagal memuat lokasi_penduduk.json:", err);
                 document.getElementById('info-count').innerText = "Gagal memuat data penduduk.";
             });
 
-        function renderMarkers(dataList) {
+        function renderData(dataList) {
             pendudukLayerGroup.clearLayers();
+            markerMap = {};
+            const listContainer = document.getElementById('resident-list');
+            listContainer.innerHTML = '';
 
-            dataList.forEach(item => {
+            if (dataList.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: #888; font-size: 13px; margin: 10px 0;">Tidak ada data ditemukan.</p>';
+            }
+
+            dataList.forEach((item, index) => {
                 if (item.lat && item.lng) {
+                    // Buat Marker Peta
                     const marker = L.marker([item.lat, item.lng]);
                     
                     marker.bindPopup(`
@@ -289,6 +312,23 @@
                     `);
 
                     pendudukLayerGroup.addLayer(marker);
+                    markerMap[index] = marker;
+
+                    // Buat Item List di Sidebar
+                    const card = document.createElement('div');
+                    card.className = 'resident-item';
+                    card.innerHTML = `
+                        <h4>${item.nama || 'Tanpa Nama'}</h4>
+                        <p><b>${item.dusun || '-'}</b> — ${item.alamat || 'Alamat tidak diisi'}</p>
+                    `;
+
+                    // Event klik pada kartu sidebar untuk mengarahkan peta ke marker terkait
+                    card.onclick = () => {
+                        map.flyTo([item.lat, item.lng], 17, { duration: 1.0 });
+                        marker.openPopup();
+                    };
+
+                    listContainer.appendChild(card);
                 }
             });
 
@@ -321,7 +361,7 @@
                 return namaMatch && matchDusun;
             });
 
-            renderMarkers(filtered);
+            renderData(filtered);
 
             if (filtered.length > 0 && pendudukLayerGroup.getLayers().length > 0) {
                 const groupBounds = L.featureGroup(pendudukLayerGroup.getLayers()).getBounds();

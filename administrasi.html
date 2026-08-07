@@ -178,56 +178,43 @@
 
         /* Footer */
         .site-footer {
-    background-color: #1e293b;
-    color: #f3f4f6;
-    padding: 20px 15px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
-    margin-top: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-.footer-container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-.footer-title {
-    font-weight: 600;
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: #e2e8f0;
-}
-.team-names-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-.team-badge {
-    background-color: #334155;
-    color: #f8fafc;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    display: inline-block;
-    transition: background-color 0.2s, transform 0.2s;
-    white-space: nowrap;
-}
-.team-badge:hover {
-    background-color: #475569;
-    transform: translateY(-1px);
-}
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 20px 15px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #9ca3af;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-@media screen and (max-width: 768px) {
-    .site-footer {
-        padding: 15px 10px;
-    }
-    .team-badge {
-        font-size: 11px;
-        padding: 5px 10px;
-    }
-}
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            .doc-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -369,28 +356,29 @@
     </div>
 
     <!-- Footer KKN -->
-   <footer class="site-footer">
-      <div class="footer-container">
-        <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
-        <div class="team-names-container">
-          <span class="team-badge">Ariel Apriadi</span>
-          <span class="team-badge">Muh. Biyadikal Khoir</span>
-          <span class="team-badge">Syakira Aulia Annissa</span>
-          <span class="team-badge">Rifqah Fauziah R</span>
-          <span class="team-badge">Thoriq Kemal Abillah</span>
-          <span class="team-badge">Syuk Rina Bte Amirudin</span>
-          <span class="team-badge">Ucok Marulli Matondang</span>
-          <span class="team-badge">Muh. Ikhwan Ghazalah Tamar</span>
-          <span class="team-badge">Sarmila</span>
-          <span class="team-badge">Regita Zalfa Khalizah Haryanto</span>
-          <span class="team-badge">Melni Annisatul Mardia</span>
-          <span class="team-badge">Taufik Hidayat</span>
-          <span class="team-badge">Indriana</span>
-          <span class="team-badge">Ela Sukmawati Tamrin</span>
-          <span class="team-badge">Virji Andini Tri Ramadani Powatu</span>
-        </div>
-      </div>
-</footer>
+    <footer class="site-footer">
+          <div class="footer-container">
+            <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
+            <div class="team-grid">
+              <span>Ariel Apriadi</span>
+              <span>Muh. Biyadikal Khoir</span>
+              <span>Syakira Aulia Annissa</span>
+              <span>Rifqah Fauziah R</span>
+              <span>Thoriq Kemal Abillah</span>
+              <span>Syuk Rina Bte Amirudin</span>
+              <span>Ucok Marulli Matondang</span>
+              <span>Muh. Ikhwan Ghazalah Tamar</span>
+              <span>Sarmila</span>
+              <span>Regita Zalfa Khalizah Haryanto</span>
+              <span>Melni Annisatul Mardia</span>
+              <span>Taufik Hidayat</span>
+              <span>Indriana</span>
+              <span>Ela Sukmawati Tamrin</span>
+              <span>Virji Andini Tri Ramadani Powatu</span>
+            </div>
+          </div>
+    </footer>
+</div>
 
 </body>
 </html>
