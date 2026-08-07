@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrasi Desa Ulaweng</title>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
+        h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        /* Container Utama */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Warning Banner Data Belum Lengkap */
+        .warning-banner {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .warning-banner span {
+            font-size: 18px;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            border: 1px solid #c8e6c9;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .info-banner span {
+            font-size: 20px;
+        }
+
+        /* Grid Dokumen */
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .doc-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-top: 4px solid #28a745;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .doc-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .doc-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .doc-icon {
+            font-size: 28px;
+            background: #f1f8f1;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .doc-title-group h3 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            color: #111;
+        }
+        .doc-title-group p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .doc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 12px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .btn-download {
+            background-color: #28a745;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+        .btn-download:hover {
+            background-color: #218838;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 20px 15px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #9ca3af;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            .doc-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar / Bilah Navigasi -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏠</span> KKN Ulaweng 2026
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Peta Ulaweng</a>
+            <a href="apbdes.html">APBDes Desa</a>
+            <a href="administrasi.html" class="active">Administrasi Desa</a>
+            <a href="penduduk.html">Data Penduduk</a>
+        </div>
+    </nav>
+
+    <h1>📂 Layanan Administrasi & Unduh Berkas Desa Ulaweng</h1>
+    <p class="subtitle">Pusat unduhan formulir surat dan dokumen administrasi kependudukan resmi Desa Ulaweng</p>
+
+    <!-- Peringatan Data Belum Lengkap -->
+    <div class="warning-banner">
+        <span>⚠️</span>
+        <div>PERHATIAN: Halaman ini beserta daftar berkas formulir di bawah ini masih dalam tahap penyusunan dan menggunakan <strong>data/contoh sementara</strong>. Dokumen dan layanan lengkap akan segera diperbarui.</div>
+    </div>
+
+    <!-- Info Banner -->
+    <div class="info-banner">
+        <span>ℹ️</span>
+        <div>Silakan unduh berkas formulir di bawah ini sesuai dengan keperluan Anda. Cetak formulir dan lengkapi datanya sebelum dibawa ke Kantor Desa Ulaweng untuk proses verifikasi lebih lanjut.</div>
+    </div>
+
+    <!-- Daftar Berkas / Dokumen -->
+    <div class="doc-grid">
+
+        <!-- Dokumen 1: Surat Keterangan Dokter Kecelakaan & Cacat Tetap -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">📄</div>
+                    <div class="doc-title-group">
+                        <h3>Formulir Surat Keterangan Dokter (Kecelakaan & Cacat Tetap)</h3>
+                        <p>Format surat keterangan medis untuk pengobatan/perawatan, meninggal dunia, atau cacat tetap akibat kecelakaan.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Form_Suket_Dokter_Kecelakaan.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+        <!-- Dokumen 2: Surat Pengantar KTP / KK -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">🪪</div>
+                    <div class="doc-title-group">
+                        <h3>Surat Pengantar Pembuatan KTP & KK</h3>
+                        <p>Formulir pengantar resmi dari desa untuk pengurusan kartu tanda penduduk baru atau pembaruan kartu keluarga.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Surat_Pengantar_KTP_KK.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+        <!-- Dokumen 3: Surat Keterangan Tidak Mampu (SKTM) -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">📋</div>
+                    <div class="doc-title-group">
+                        <h3>Surat Keterangan Tidak Mampu (SKTM)</h3>
+                        <p>Formulir pengajuan keterangan kurang mampu untuk keperluan keringanan biaya kesehatan, pendidikan, atau bantuan sosial.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Surat_Keterangan_Tidak_Mampu.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+        <!-- Dokumen 4: Surat Keterangan Usaha (SKU) -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">🏪</div>
+                    <div class="doc-title-group">
+                        <h3>Surat Keterangan Usaha (SKU)</h3>
+                        <p>Formulir pengajuan keterangan kepemilikan usaha atau UMKM bagi warga desa untuk keperluan administrasi perbankan/legalitas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Surat_Keterangan_Usaha.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+        <!-- Dokumen 5: Surat Keterangan Domisili -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">🏠</div>
+                    <div class="doc-title-group">
+                        <h3>Surat Keterangan Domisili</h3>
+                        <p>Formulir keterangan tempat tinggal tetap atau domisili sementara bagi warga yang beraktivitas di wilayah Desa Ulaweng.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Surat_Keterangan_Domisili.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+        <!-- Dokumen 6: Surat Keterangan Kelahiran / Kematian -->
+        <div class="doc-card">
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">📜</div>
+                    <div class="doc-title-group">
+                        <h3>Surat Keterangan Kelahiran & Kematian</h3>
+                        <p>Formulir pelaporan pencatatan sipil peristiwa penting kelahiran atau kematian warga di lingkup Desa Ulaweng.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-footer">
+                <span>Format: PDF (.pdf)</span>
+                <a href="files/Surat_Kelahiran_Kematian.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer KKN -->
+    <footer class="site-footer">
+          <div class="footer-container">
+            <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
+            <div class="team-grid">
+              <span>Ariel Apriadi</span>
+              <span>Muh. Biyadikal Khoir</span>
+              <span>Syakira Aulia Annissa</span>
+              <span>Rifqah Fauziah R</span>
+              <span>Thoriq Kemal Abillah</span>
+              <span>Syuk Rina Bte Amirudin</span>
+              <span>Ucok Marulli Matondang</span>
+              <span>Muh. Ikhwan Ghazalah Tamar</span>
+              <span>Sarmila</span>
+              <span>Regita Zalfa Khalizah Haryanto</span>
+              <span>Melni Annisatul Mardia</span>
+              <span>Taufik Hidayat</span>
+              <span>Indriana</span>
+              <span>Ela Sukmawati Tamrin</span>
+              <span>Virji Andini Tri Ramadani Powatu</span>
+            </div>
+          </div>
+    </footer>
+</div>
+
+</body>
+</html>

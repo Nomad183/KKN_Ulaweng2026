@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APBDes Desa Ulaweng</title>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
+        h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        /* Container Utama */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Warning Banner Dummy Data */
+        .warning-banner {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .warning-banner span {
+            font-size: 18px;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #28a745;
+        }
+        .summary-card.belanja { border-left-color: #D84315; }
+        .summary-card.pembiayaan { border-left-color: #0288D1; }
+        .summary-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .summary-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #111;
+            margin: 0;
+        }
+
+        /* Section Tables */
+        .card-section {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .card-section h2 {
+            font-size: 18px;
+            color: #1b5e20;
+            margin-top: 0;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f9fbf9;
+        }
+        .text-right { text-align: right; }
+        .total-row {
+            font-weight: bold;
+            background-color: #f1f8f1;
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 20px 15px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: #9ca3af;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            table { font-size: 13px; }
+            th, td { padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar / Bilah Navigasi -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏠</span> KKN Ulaweng 2026
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Peta Ulaweng</a>
+            <a href="apbdes.html" class="active">APBDes Desa</a>
+            <a href="administrasi.html">Administrasi Desa</a>
+            <a href="penduduk.html">Data Penduduk</a>
+        </div>
+    </nav>
+
+    <h1>💰 Transparansi APBDes Desa Ulaweng</h1>
+    <p class="subtitle">Laporan Realisasi Anggaran Pendapatan dan Belanja Desa Ulaweng Tahun Anggaran 2026</p>
+
+    <!-- Peringatan Data Dummy -->
+    <div class="warning-banner">
+        <span>⚠️</span>
+        <div>PERHATIAN: Halaman ini saat ini masih menggunakan <strong>data dummy / contoh sementara</strong>. Angka dan rincian anggaran di bawah ini akan segera diperbarui sesuai dengan data riil Desa Ulaweng.</div>
+    </div>
+
+    <!-- Ringkasan Kartu -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <h3>Total Pendapatan Desa</h3>
+            <p class="value">Rp 1.450.000.000</p>
+        </div>
+        <div class="summary-card belanja">
+            <h3>Total Belanja Desa</h3>
+            <p class="value">Rp 1.482.500.000</p>
+        </div>
+        <div class="summary-card pembiayaan">
+            <h3>Pembiayaan Netto</h3>
+            <p class="value">Rp 32.500.000</p>
+        </div>
+    </div>
+
+    <!-- Tabel 1: Pendapatan -->
+    <div class="card-section">
+        <h2>1. Pendapatan Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Rekening</th>
+                    <th>Uraian Bidang / Sumber Pendapatan</th>
+                    <th class="text-right">Anggaran (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>4.1</td>
+                    <td>Pendapatan Asli Desa (PADes)</td>
+                    <td class="text-right">45.000.000</td>
+                </tr>
+                <tr>
+                    <td>4.2</td>
+                    <td>Dana Desa (DD)</td>
+                    <td class="text-right" style="white-space: nowrap;">980.000.000</td>
+                </tr>
+                <tr>
+                    <td>4.3</td>
+                    <td>Bagian dari Hasil Pajak dan Retribusi Daerah (BHPR)</td>
+                    <td class="text-right">65.000.000</td>
+                </tr>
+                <tr>
+                    <td>4.4</td>
+                    <td>Alokasi Dana Desa (ADD)</td>
+                    <td class="text-right">360.000.000</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="2">Jumlah Pendapatan</td>
+                    <td class="text-right">Rp 1.450.000.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabel 2: Belanja -->
+    <div class="card-section">
+        <h2>2. Belanja Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Rekening</th>
+                    <th>Bidang Kegiatan</th>
+                    <th class="text-right">Anggaran (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>5.1</td>
+                    <td>Penyelenggaraan Pemerintahan Desa</td>
+                    <td class="text-right">450.000.000</td>
+                </tr>
+                <tr>
+                    <td>5.2</td>
+                    <td>Pelaksanaan Pembangunan Desa</td>
+                    <td class="text-right">650.000.000</td>
+                </tr>
+                <tr>
+                    <td>5.3</td>
+                    <td>Pembinaan Kemasyarakatan Desa</td>
+                    <td class="text-right">120.000.000</td>
+                </tr>
+                <tr>
+                    <td>5.4</td>
+                    <td>Pemberdayaan Masyarakat Desa</td>
+                    <td class="text-right">182.500.000</td>
+                </tr>
+                <tr>
+                    <td>5.5</td>
+                    <td>Penanggulangan Bencana, Darurat dan Mendesak Desa</td>
+                    <td class="text-right">80.000.000</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="2">Jumlah Belanja</td>
+                    <td class="text-right">Rp 1.482.500.000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer KKN -->
+    <footer class="site-footer">
+          <div class="footer-container">
+            <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
+            <div class="team-grid">
+              <span>Ariel Apriadi</span>
+              <span>Muh. Biyadikal Khoir</span>
+              <span>Syakira Aulia Annissa</span>
+              <span>Rifqah Fauziah R</span>
+              <span>Thoriq Kemal Abillah</span>
+              <span>Syuk Rina Bte Amirudin</span>
+              <span>Ucok Marulli Matondang</span>
+              <span>Muh. Ikhwan Ghazalah Tamar</span>
+              <span>Sarmila</span>
+              <span>Regita Zalfa Khalizah Haryanto</span>
+              <span>Melni Annisatul Mardia</span>
+              <span>Taufik Hidayat</span>
+              <span>Indriana</span>
+              <span>Ela Sukmawati Tamrin</span>
+              <span>Virji Andini Tri Ramadani Powatu</span>
+            </div>
+          </div>
+    </footer>
+</div>
+
+</body>
+</html>
