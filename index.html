@@ -18,6 +18,45 @@
             color: #333;
         }
 
+        /* Navbar Styling */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
         h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
         p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
 
@@ -283,6 +322,8 @@
         padding: 20px 15px;
         font-family: sans-serif;
         text-align: center;
+        margin-top: 25px;
+        border-radius: 10px;
       }
       .footer-container {
         max-width: 1100px;
@@ -311,6 +352,19 @@
     </style>
 </head>
 <body>
+
+<!-- Navbar / Bilah Navigasi -->
+<nav class="navbar">
+    <div class="navbar-brand">
+        <span>🏠</span> KKN Ulaweng 2026
+    </div>
+    <div class="navbar-links">
+        <a href="index.html" class="active">Peta Ulaweng</a>
+        <a href="apbdes.html">APBDES Desa</a>
+        <a href="administrasi.html">Administrasi Desa</a>
+        <a href="penduduk.html">Data Penduduk</a>
+    </div>
+</nav>
 
 <h1>🗺️ Portal Geografis Desa Ulaweng</h1>
 <p class="subtitle">Sistem Informasi Geografis Multi-Layer Presisi Tinggi (Potensi, Fasilitas & UMKM Desa)</p>
@@ -382,7 +436,7 @@
           <span>Virji Andini Tri Ramadani Powatu</span>
         </div>
       </div>
-    </footer>
+</footer>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -449,14 +503,6 @@
         'Ikon Desa': '#8E24AA'
     };
 
-    // Skema Warna Kategori UMKM
-    const umkmColor = {
-        'Kuliner': '#D84315',
-        'Sembako': '#F57F17',
-        'Jasa': '#0288D1',
-        'Kerajinan': '#7B1FA2'
-    };
-
     // Icon Custom Marker Lokasi Saya
     const userLocationIcon = L.divIcon({
         className: 'user-location-container',
@@ -482,7 +528,6 @@
 
     const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
 
-    // Processing Masking GeoJSON Inverted MultiPolygon / Polygon
     function processGeoJSONGeometry(geometry) {
         let villageCoords = [];
         if (geometry.type === 'Polygon') {
@@ -497,7 +542,6 @@
         return villageCoords;
     }
 
-    // Memuat Batas_Desa_Ulaweng.geojson
     fetch('Batas_Desa_Ulaweng.geojson')
         .then(res => res.json())
         .then(data => {
@@ -518,13 +562,11 @@
         })
         .catch(err => console.error("Gagal memuat Batas_Desa_Ulaweng.geojson:", err));
 
-    // Memuat Sektor_Potensi_Ulaweng.geojson
     fetch('Sektor_Potensi_Ulaweng.geojson')
         .then(res => res.json())
         .then(data => { rawSektorData = data; })
         .catch(err => console.error("Gagal memuat Sektor_Potensi_Ulaweng.geojson:", err));
 
-    // Memuat POI_Desa_Ulaweng.geojson
     fetch('POI_Desa_Ulaweng.geojson')
         .then(res => res.json())
         .then(data => { rawFasilitasData = data; })
@@ -569,10 +611,8 @@
         };
     }
 
-    // Render Marker Fasilitas Desa dari GeoJSON (Diperbaiki dengan Ekstensi & Path Aman)
     function renderFasilitasMarkers(filterKategori = 'Semua') {
         fasilitasGroup.clearLayers();
-
         if (!rawFasilitasData) return;
 
         rawFasilitasData.features.forEach(feature => {
@@ -584,16 +624,12 @@
             const fid = p.fid || p.FID || '';
             const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
             
-            // Ambil properti foto dengan variasi nama lebih luas
             let namaFoto = p.foto || p.Foto || p.FOTO || p.gambar || p.image || '';
-            
-            // Penanganan ekstensi otomatis jika terlewat di GeoJSON
             if (namaFoto && !namaFoto.includes('.')) {
                 namaFoto += '.jpg'; 
             }
 
             const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
-
             const parsed = parseKeterangan(rawKet);
 
             if (filterKategori !== 'Semua' && parsed.kat !== filterKategori && 
@@ -625,10 +661,8 @@
         });
     }
 
-    // Render Semua Marker UMKM Desa (Tanpa Sub-Filter)
     function renderUMKMMarkers() {
         umkmGroup.clearLayers();
-
         const iconsList  = ["🏪", "🛍️", "🏬", "🛒"];
         const colorsList = ["#E65100", "#D84315", "#0288D1", "#7B1FA2"];
 
@@ -643,7 +677,6 @@
             }
             
             const imgPath = fotoName ? `umkm/${fotoName}` : 'images/default.jpeg';
-
             const customIcon = L.divIcon({
                 className: 'custom-poi-container',
                 html: `<div class="custom-poi-marker" style="background-color: ${selectedColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
@@ -666,7 +699,6 @@
         });
     }
 
-    // Mode Switcher Utama
     function setMode(mode) {
         activeMode = mode;
 
@@ -720,7 +752,6 @@
         }
     }
 
-    // Sub-Filter Sektor Potensi dengan Auto Zoom
     function filterSektor(sektorTarget) {
         if (sektorLayer) {
             map.removeLayer(sektorLayer);
@@ -779,7 +810,6 @@
         }
     }
 
-    // Sub-Filter Fasilitas Desa
     function filterFasilitas(katTarget, btnElement) {
         const buttons = document.querySelectorAll('.btn-fas-filter');
         buttons.forEach(btn => btn.classList.remove('active-fas'));
@@ -798,7 +828,6 @@
         }
     }
 
-    // Geolokasi GPS Akurasi Tinggi
     function cariLokasiSaya() {
         if (!navigator.geolocation) {
             alert("Browser Anda tidak mendukung Geolocation.");
@@ -871,7 +900,6 @@
         );
     }
 
-    // Smart Redirect Google Maps
     function openGoogleMaps() {
         const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || navigator.vendor || window.opera);
         const gmapsUrl = "https://maps.app.goo.gl/TCbFavb3YdjtJb9V8";
