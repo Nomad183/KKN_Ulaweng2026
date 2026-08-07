@@ -151,11 +151,11 @@
             background-color: #f1f8f1;
         }
 
-        /* Footer */
+        /* Footer & Collapsible Details Styling */
         .site-footer {
             background-color: #1f2937;
             color: #f3f4f6;
-            padding: 20px 15px;
+            padding: 15px 20px;
             font-family: sans-serif;
             text-align: center;
             margin-top: 30px;
@@ -165,17 +165,34 @@
             max-width: 1100px;
             margin: 0 auto;
         }
-        .footer-title {
+        .footer-details summary {
+            cursor: pointer;
+            list-style: none;
+        }
+        .footer-details summary::-webkit-details-marker {
+            display: none;
+        }
+        .footer-title-toggle {
             font-weight: bold;
-            margin-bottom: 12px;
             font-size: 0.95rem;
             color: #9ca3af;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .footer-title-toggle:hover {
+            color: #f3f4f6;
         }
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 8px 16px;
             font-size: 0.85rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         .team-grid span {
             background: rgba(255, 255, 255, 0.05);
@@ -190,6 +207,33 @@
             body { padding: 12px; }
             table { font-size: 13px; }
             th, td { padding: 10px 8px; }
+
+            /* Navbar Mobile Horizontal Scroll Fix */
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+            .navbar-links {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                width: 100%;
+                gap: 8px;
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .navbar-links::-webkit-scrollbar {
+                display: none;
+            }
+            .navbar-links a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
@@ -319,27 +363,32 @@
         </table>
     </div>
 
-    <!-- Footer KKN -->
+    <!-- Footer KKN (Collapsible / Close & Open) -->
     <footer class="site-footer">
           <div class="footer-container">
-            <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
-            <div class="team-grid">
-              <span>Ariel Apriadi</span>
-              <span>Muh. Biyadikal Khoir</span>
-              <span>Syakira Aulia Annissa</span>
-              <span>Rifqah Fauziah R</span>
-              <span>Thoriq Kemal Abillah</span>
-              <span>Syuk Rina Bte Amirudin</span>
-              <span>Ucok Marulli Matondang</span>
-              <span>Muh. Ikhwan Ghazalah Tamar</span>
-              <span>Sarmila</span>
-              <span>Regita Zalfa Khalizah Haryanto</span>
-              <span>Melni Annisatul Mardia</span>
-              <span>Taufik Hidayat</span>
-              <span>Indriana</span>
-              <span>Ela Sukmawati Tamrin</span>
-              <span>Virji Andini Tri Ramadani Powatu</span>
-            </div>
+            <details class="footer-details">
+                <summary class="footer-title-toggle">
+                    <span>Disusun oleh Tim KKN Reguler Desa Ulaweng 2026</span>
+                    <small style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Ketuk untuk Lihat/Tutup ▾</small>
+                </summary>
+                <div class="team-grid">
+                  <span>Ariel Apriadi</span>
+                  <span>Muh. Biyadikal Khoir</span>
+                  <span>Syakira Aulia Annissa</span>
+                  <span>Rifqah Fauziah R</span>
+                  <span>Thoriq Kemal Abillah</span>
+                  <span>Syuk Rina Bte Amirudin</span>
+                  <span>Ucok Marulli Matondang</span>
+                  <span>Muh. Ikhwan Ghazalah Tamar</span>
+                  <span>Sarmila</span>
+                  <span>Regita Zalfa Khalizah Haryanto</span>
+                  <span>Melni Annisatul Mardia</span>
+                  <span>Taufik Hidayat</span>
+                  <span>Indriana</span>
+                  <span>Ela Sukmawati Tamrin</span>
+                  <span>Virji Andini Tri Ramadani Powatu</span>
+                </div>
+            </details>
           </div>
     </footer>
 </div>
