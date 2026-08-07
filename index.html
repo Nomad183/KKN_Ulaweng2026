@@ -277,6 +277,37 @@
             .actions { flex-direction: column; width: 100%; }
             .actions button, .actions .btn-gmaps { width: 100%; justify-content: center; }
         }
+      .site-footer {
+        background-color: #1f2937;
+        color: #f3f4f6;
+        padding: 20px 15px;
+        font-family: sans-serif;
+        text-align: center;
+      }
+      .footer-container {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .footer-title {
+        font-weight: bold;
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+        color: #9ca3af;
+      }
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 8px 16px;
+        font-size: 0.85rem;
+      }
+      .team-grid span {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     </style>
 </head>
 <body>
@@ -329,6 +360,29 @@
         📍 Buka Lokasi Desa Ulaweng di Google Maps
     </button>
 </div>
+
+<footer class="site-footer">
+      <div class="footer-container">
+        <p class="footer-title">Disusun oleh Tim KKN Reguler Desa Ulaweng 2026:</p>
+        <div class="team-grid">
+          <span>Ariel Apriadi</span>
+          <span>Muh. Biyadikal Khoir</span>
+          <span>Syakira Aulia Annissa</span>
+          <span>Rifqah Fauziah R</span>
+          <span>Thoriq Kemal Abillah</span>
+          <span>Syuk Rina Bte Amirudin</span>
+          <span>Ucok Marulli Matondang</span>
+          <span>Muh. Ikhwan Ghazalah Tamar</span>
+          <span>Sarmila</span>
+          <span>Regita Zalfa Khalizah Haryanto</span>
+          <span>Melni Annisatul Mardia</span>
+          <span>Taufik Hidayat</span>
+          <span>Indriana</span>
+          <span>Ela Sukmawati Tamrin</span>
+          <span>Virji Andini Tri Ramadani Powatu</span>
+        </div>
+      </div>
+    </footer>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -515,7 +569,7 @@
         };
     }
 
-    // Render Marker Fasilitas Desa dari GeoJSON
+    // Render Marker Fasilitas Desa dari GeoJSON (Diperbaiki dengan Ekstensi & Path Aman)
     function renderFasilitasMarkers(filterKategori = 'Semua') {
         fasilitasGroup.clearLayers();
 
@@ -529,8 +583,16 @@
 
             const fid = p.fid || p.FID || '';
             const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
-            const namaFoto = p.foto || p.Foto || p.FOTO || '';
-            const imgPath = namaFoto ? `umkm/${namaFoto}` : 'images/default.jpeg';
+            
+            // Ambil properti foto dengan variasi nama lebih luas
+            let namaFoto = p.foto || p.Foto || p.FOTO || p.gambar || p.image || '';
+            
+            // Penanganan ekstensi otomatis jika terlewat di GeoJSON
+            if (namaFoto && !namaFoto.includes('.')) {
+                namaFoto += '.jpg'; 
+            }
+
+            const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
 
             const parsed = parseKeterangan(rawKet);
 
@@ -565,46 +627,42 @@
 
     // Render Semua Marker UMKM Desa (Tanpa Sub-Filter)
     function renderUMKMMarkers() {
-    umkmGroup.clearLayers();
+        umkmGroup.clearLayers();
 
-    // Palet Icon dan Warna yang berputar seragam setiap 2 item
-    const iconsList  = ["🏪", "🛍️", "🏬", "🛒"];
-    const colorsList = ["#E65100", "#D84315", "#0288D1", "#7B1FA2"];
+        const iconsList  = ["🏪", "🛍️", "🏬", "🛒"];
+        const colorsList = ["#E65100", "#D84315", "#0288D1", "#7B1FA2"];
 
-    umkmDataList.forEach((item, index) => {
-        // Logika pola 2 item (0-1: Ke-1, 2-3: Ke-2, dst.)
-        const patternIndex = Math.floor(index / 2) % iconsList.length;
-        const selectedIcon  = iconsList[patternIndex];
-        const selectedColor = colorsList[patternIndex];
+        umkmDataList.forEach((item, index) => {
+            const patternIndex = Math.floor(index / 2) % iconsList.length;
+            const selectedIcon  = iconsList[patternIndex];
+            const selectedColor = colorsList[patternIndex];
 
-        // Validasi & Sanitasi Path Foto UMKM
-        let fotoName = item.foto || '';
-        if (fotoName && !fotoName.includes('.')) {
-            fotoName += '.jpg'; // Menambahkan ekstensi .jpg jika terlewat
-        }
-        
-        const imgPath = fotoName ? `umkm/${fotoName}` : 'images/default.jpeg';
+            let fotoName = item.foto || '';
+            if (fotoName && !fotoName.includes('.')) {
+                fotoName += '.jpg'; 
+            }
+            
+            const imgPath = fotoName ? `umkm/${fotoName}` : 'images/default.jpeg';
 
-        // Marker Icon dengan warna & emoji yang sesuai urutan
-        const customIcon = L.divIcon({
-            className: 'custom-poi-container',
-            html: `<div class="custom-poi-marker" style="background-color: ${selectedColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
-            iconSize: [32, 32],
-            iconAnchor: [16, 16]
-        });
+            const customIcon = L.divIcon({
+                className: 'custom-poi-container',
+                html: `<div class="custom-poi-marker" style="background-color: ${selectedColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
 
-        const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+            const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
 
-        const marker = L.marker([item.lat, item.lng], { icon: customIcon });
-        marker.bindPopup(`
-            <div class="popup-card">
-                <img src="${imgPath}" alt="${item.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
-                <span class="badge" style="background:${selectedColor}">UMKM Desa</span>
-                <h3>${item.nama}</h3>
-                <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
-            </div>
-        `);
-        umkmGroup.addLayer(marker);
+            const marker = L.marker([item.lat, item.lng], { icon: customIcon });
+            marker.bindPopup(`
+                <div class="popup-card">
+                    <img src="${imgPath}" alt="${item.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
+                    <span class="badge" style="background:${selectedColor}">UMKM Desa</span>
+                    <h3>${item.nama}</h3>
+                    <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
+                </div>
+            `);
+            umkmGroup.addLayer(marker);
         });
     }
 
@@ -619,7 +677,6 @@
         const potensiControls = document.getElementById('potensi-controls');
         const fasilitasControls = document.getElementById('fasilitas-controls');
         
-        // Reset Tampilan Layer
         if (sektorLayer) map.removeLayer(sektorLayer);
         map.removeLayer(fasilitasGroup);
         map.removeLayer(umkmGroup);
