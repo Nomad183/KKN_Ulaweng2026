@@ -216,30 +216,23 @@
             color: #555;
         }
 
-        /* Styling Khusus Mode Perangkat Mobile / HP (Sidebar Dikecilkan agar Peta Terlihat) */
-        body.is-mobile {
-            padding: 8px;
-        }
-        body.is-mobile .app-container {
-            flex-direction: column;
-            gap: 10px;
-        }
-        body.is-mobile .sidebar {
-            width: 100%;
-            height: auto;
-            max-height: 210px; /* Sidebar dibuat kompak agar tidak menutupi peta */
-            padding: 12px;
-        }
-        body.is-mobile #map {
-            height: 480px; /* Peta diberikan ruang tinggi yang leluasa */
-            width: 100%;
-        }
-
+        /* Styling Responsif untuk HP / Mobile */
         @media screen and (max-width: 768px) {
-            body { padding: 8px; }
-            .app-container { flex-direction: column; gap: 10px; }
-            .sidebar { width: 100%; height: auto; max-height: 210px; padding: 12px; }
-            #map { height: 480px; width: 100%; }
+            body { padding: 10px; }
+            .app-container { 
+                flex-direction: column; 
+                gap: 12px; 
+            }
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                max-height: 200px; /* Sidebar dikecilkan agar peta langsung muat di layar HP */
+                padding: 12px; 
+            }
+            #map { 
+                height: 450px; 
+                width: 100%; 
+            }
 
             /* Navbar Mobile Horizontal Scroll Fix */
             .navbar {
@@ -286,7 +279,7 @@
     </nav>
 
     <h1>🗺️ Map Penduduk Desa Ulaweng</h1>
-    <p class="subtitle" id="device-subtitle">Visualisasi Batas Wilayah dan Daftar Lokasi Penduduk per Dusun</p>
+    <p class="subtitle">Visualisasi Batas Wilayah dan Daftar Lokasi Penduduk per Dusun</p>
 
     <div class="app-container">
         <div class="sidebar">
@@ -320,23 +313,6 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Deteksi Otomatis Jenis Perangkat (Mobile / HP vs Laptop / Desktop)
-        function detectDeviceAndAdjust() {
-            const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-            
-            if (isMobileDevice) {
-                document.body.classList.add('is-mobile');
-                console.log("Mode Perangkat: Handphone / Mobile terdeteksi.");
-            } else {
-                document.body.classList.remove('is-mobile');
-                console.log("Mode Perangkat: Laptop / Desktop terdeteksi.");
-            }
-        }
-
-        // Jalankan saat halaman dimuat dan saat ukuran layar berubah (resize)
-        window.addEventListener('load', detectDeviceAndAdjust);
-        window.addEventListener('resize', detectDeviceAndAdjust);
-
         const ULAWENG_LAT = -3.952509446024583;
         const ULAWENG_LNG = 121.33541203412234;
 
@@ -349,7 +325,7 @@
             center: [ULAWENG_LAT, ULAWENG_LNG],
             zoom: 14,
             layers: [satelitLayer],
-            tap: true // Memperbaiki interaksi sentuhan (tap) pada browser mobile
+            tap: true
         });
 
         const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
