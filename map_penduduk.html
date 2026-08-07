@@ -216,30 +216,30 @@
             color: #555;
         }
 
-        /* Styling Tambahan untuk Mode Perangkat Mobile / HP */
+        /* Styling Khusus Mode Perangkat Mobile / HP (Sidebar Dikecilkan agar Peta Terlihat) */
         body.is-mobile {
             padding: 8px;
         }
         body.is-mobile .app-container {
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
         body.is-mobile .sidebar {
             width: 100%;
             height: auto;
-            max-height: 380px;
+            max-height: 210px; /* Sidebar dibuat kompak agar tidak menutupi peta */
             padding: 12px;
         }
         body.is-mobile #map {
-            height: 400px;
+            height: 480px; /* Peta diberikan ruang tinggi yang leluasa */
             width: 100%;
         }
 
         @media screen and (max-width: 768px) {
-            body { padding: 10px; }
-            .app-container { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; max-height: 400px; }
-            #map { height: 400px; }
+            body { padding: 8px; }
+            .app-container { flex-direction: column; gap: 10px; }
+            .sidebar { width: 100%; height: auto; max-height: 210px; padding: 12px; }
+            #map { height: 480px; width: 100%; }
 
             /* Navbar Mobile Horizontal Scroll Fix */
             .navbar {
