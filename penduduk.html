@@ -3,31 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Penduduk - KKN UHO 2026</title>
+    <title>Sistem Data Penduduk Desa Ulaweng</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Style Model Portal Desa -->
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { box-sizing: border-box; }
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
             background-color: #f4f7f6;
             color: #333;
-            padding: 20px;
-            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* Navbar Styling Responsif */
+        /* Navbar Styling */
         .navbar {
             background-color: #ffffff;
             color: #333;
-            padding: 12px 20px;
+            padding: 12px 25px;
             display: flex;
-            flex-direction: column;
-            align-items: stretch;
+            justify-content: space-between;
+            align-items: center;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-            gap: 12px;
+            margin-bottom: 20px;
         }
         .navbar-brand {
             font-weight: bold;
@@ -39,19 +45,8 @@
         }
         .navbar-links {
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            width: 100%;
-            padding-bottom: 4px;
-            white-space: nowrap;
-            scrollbar-width: thin;
-        }
-        .navbar-links::-webkit-scrollbar {
-            height: 4px;
-        }
-        .navbar-links::-webkit-scrollbar-thumb {
-            background: #ddd;
-            border-radius: 4px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         .navbar-links a {
             text-decoration: none;
@@ -61,322 +56,184 @@
             padding: 6px 12px;
             border-radius: 5px;
             transition: background-color 0.2s, color 0.2s;
-            flex-shrink: 0;
         }
         .navbar-links a:hover, .navbar-links a.active {
             background-color: #e8f5e9;
             color: #28a745;
         }
 
-        /* Desktop Navbar Layout */
-        @media (min-width: 768px) {
-            .navbar {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 12px 25px;
-            }
-            .navbar-links {
-                width: auto;
-                overflow-x: visible;
-                white-space: normal;
-                padding-bottom: 0;
-            }
-        }
+        h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
 
-        /* Header Statistik */
-        .stats-header {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .stat-card {
-            background: #fff;
+        /* Footer & Collapsible Details Styling */
+        .site-footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
             padding: 15px 20px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            text-align: center;
-            border-bottom: 4px solid #007bff;
         }
-        .stat-card h4 {
-            margin: 0 0 5px 0;
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
         }
-        .stat-card span {
-            font-size: 20px;
-            font-weight: bold;
-            color: #007bff;
+        .footer-details summary {
+            cursor: pointer;
+            list-style: none;
         }
-        
-        /* Search Bar & Button Container */
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        #searchInput {
-            width: 100%;
-            max-width: 400px;
-            padding: 10px 18px;
-            font-size: 15px;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        #searchInput:focus {
-            border-color: #007bff;
-        }
-
-        /* Tombol Peta Penduduk */
-        .btn-map {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-        .btn-map:hover {
-            background-color: #218838;
-        }
-
-        /* Area Hasil Pencarian */
-        .section-title {
-            text-align: center;
-            margin-bottom: 10px;
-            color: #444;
-        }
-        .search-results-container {
-            background: #fff;
-            border: 2px dashed #007bff;
-            border-radius: 10px;
-            padding: 15px;
-            max-height: 250px;
-            overflow-y: auto;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 30px;
+        .footer-details summary::-webkit-details-marker {
             display: none;
         }
-        
-        /* Container Kolom Dusun Berdampingan (Memenuhi Lebar Layar & Tetap Mendukung Scroll) */
-        .dusun-container {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 15px;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            margin-top: 10px;
-            width: 100%;
-        }
-        .dusun-column {
-            background: #fff;
-            flex: 1;
-            min-width: 270px;
-            border-radius: 10px;
-            padding: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-top: 4px solid #28a745;
-            display: flex;
-            flex-direction: column;
-            height: 70vh;
-        }
-        .dusun-column h3 {
-            text-align: center;
-            font-size: 15px;
-            margin-top: 0;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-            flex-shrink: 0;
-        }
-
-        .isi-kolom {
-            overflow-y: auto;
-            flex-grow: 1;
-            padding-right: 4px;
-        }
-
-        .penduduk-card {
-            background: #f9f9f9;
-            padding: 8px 10px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            border-left: 3px solid #007bff;
-        }
-        .penduduk-card p {
-            margin: 2px 0;
-            font-size: 12px;
-            color: #555;
-        }
-        .penduduk-card .nama {
+        .footer-title-toggle {
             font-weight: bold;
-            font-size: 13px;
-            color: #000;
+            font-size: 0.95rem;
+            color: #9ca3af;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .footer-title-toggle:hover {
+            color: #f3f4f6;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsive Media Queries */
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+            .navbar-links {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                width: 100%;
+                gap: 8px;
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .navbar-links::-webkit-scrollbar { display: none; }
+            .navbar-links a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
 <body>
+    
+    <div class="container mx-auto px-4 py-4 max-w-5xl flex-grow w-full">
+        
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <span>🏠</span> KKN Ulaweng 2026
+            </div>
+            <div class="navbar-links">
+                <a href="index.html">Peta Ulaweng</a>
+                <a href="apbdes.html">APBDes Desa</a>
+                <a href="administrasi.html">Administrasi Desa</a>
+                <a href="penduduk.html" class="active">Data Penduduk</a>
+            </div>
+        </nav>
 
-    <!-- Navbar / Bilah Navigasi -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <span>🏠</span> KKN Ulaweng 2026
-        </div>
-        <div class="navbar-links">
-            <a href="index.html">Peta Ulaweng</a>
-            <a href="penduduk.html" class="active">Data Penduduk</a>
-            <a href="apbdes.html">APBDES Desa</a>
-            <a href="administrasi.html">Administrasi Desa</a>
-        </div>
-    </nav>
+        <!-- Header -->
+        <header class="mb-8 text-center mt-6">
+            <h1 class="text-3xl font-bold">Sistem Data Penduduk</h1>
+            <p class="subtitle mt-1">Desa Ulaweng, Kecamatan Samaturu</p>
+            
+            <!-- Tombol Peta Penduduk -->
+            <div class="mt-4">
+                <a href="map_penduduk.html" class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white font-medium px-5 py-2.5 rounded-lg shadow transition transform hover:-translate-y-0.5 cursor-pointer text-sm">
+                    🗺️ Buka Peta Penduduk
+                </a>
+            </div>
+        </header>
 
-    <!-- Header Statistik -->
-    <div class="stats-header">
-        <div class="stat-card" style="border-bottom-color: #007bff;">
-            <h4>Total Rumah</h4>
-            <span id="totalRumah">0</span>
+        <!-- Kotak Pencarian -->
+        <div class="mb-8 max-w-xl mx-auto">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Cari nama warga atau nomor rumah..." class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 bg-white">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    🔍
+                </span>
+            </div>
         </div>
-        <div class="stat-card" style="border-bottom-color: #28a745;">
-            <h4>Jumlah Populasi Desa</h4>
-            <span id="totalPopulasi">0</span>
+
+        <!-- Hasil Pencarian (Hidden secara default) -->
+        <div id="searchResultContainer" class="mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-3 text-gray-700">Hasil Pencarian</h2>
+            <div id="searchResultList" class="bg-white shadow rounded-lg divide-y divide-gray-200"></div>
         </div>
-        <div class="stat-card" style="border-bottom-color: #ffc107;">
-            <h4>Rata-rata Jiwa / Rumah</h4>
-            <span id="rataRataKeluarga">0</span>
+
+        <!-- Kartu Ringkasan Statistik -->
+        <div id="statsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Data akan dimuat secara dinamis via JavaScript -->
         </div>
-        <div class="stat-card" style="border-bottom-color: #dc3545;">
-            <h4>Range Usia</h4>
-            <span id="rangeUsia" style="font-size: 14px; line-height: 25px;">Belum Tersedia</span>
+
+        <!-- Daftar Dusun & Warga -->
+        <div id="dusunContainer" class="space-y-6">
+            <!-- Data akan dimuat secara dinamis via JavaScript -->
         </div>
+
     </div>
 
-    <!-- Search Bar & Tombol Peta Penduduk -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Cari nama atau nomor rumah...">
-        <a href="map_penduduk.html" class="btn-map">🗺️ Peta Penduduk</a>
-    </div>
-
-    <!-- Hasil Pencarian -->
-    <h3 class="section-title" id="hasilTitle" style="display: none;">Hasil Pencarian</h3>
-    <div id="searchResults" class="search-results-container"></div>
-
-    <!-- Kolom Dusun Berdampingan -->
-    <h3 class="section-title">Data Seluruh Penduduk</h3>
-    <div class="dusun-container" id="dusunContainer"></div>
-
-    <script>
-        let dataPenduduk = [];
-
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
-        const hasilTitle = document.getElementById('hasilTitle');
-        const dusunContainer = document.getElementById('dusunContainer');
-        const totalRumahEl = document.getElementById('totalRumah');
-        const totalPopulasiEl = document.getElementById('totalPopulasi');
-        const rataRataKeluargaEl = document.getElementById('rataRataKeluarga');
-        const rangeUsiaEl = document.getElementById('rangeUsia');
-
-        function buatKartu(penduduk) {
-            return `
-                <div class="penduduk-card">
-                    <p class="nama">${penduduk.nama}</p>
-                    <p>No. Rumah: ${penduduk.nomor_rumah}</p>
-                    <p>Dusun: ${penduduk.dusun}</p>
+    <!-- Footer KKN (Collapsible / Close & Open) -->
+    <footer class="site-footer">
+          <div class="footer-container">
+            <details class="footer-details">
+                <summary class="footer-title-toggle">
+                    <span>Disusun oleh Tim KKN Reguler Desa Ulaweng 2026</span>
+                    <small style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Ketuk untuk Lihat/Tutup ▾</small>
+                </summary>
+                <div class="team-grid">
+                  <span>Ariel Apriadi</span>
+                  <span>Muh. Biyadikal Khoir</span>
+                  <span>Syakira Aulia Annissa</span>
+                  <span>Rifqah Fauziah R</span>
+                  <span>Thoriq Kemal Abillah</span>
+                  <span>Syuk Rina Bte Amirudin</span>
+                  <span>Ucok Marulli Matondang</span>
+                  <span>Muh. Ikhwan Ghazalah Tamar</span>
+                  <span>Sarmila</span>
+                  <span>Regita Zalfa Khalizah Haryanto</span>
+                  <span>Melni Annisatul Mardia</span>
+                  <span>Taufik Hidayat</span>
+                  <span>Indriana</span>
+                  <span>Ela Sukmawati Tamrin</span>
+                  <span>Virji Andini Tri Ramadani Powatu</span>
                 </div>
-            `;
-        }
+            </details>
+          </div>
+    </footer>
 
-        function renderKolomDusun() {
-            const daftarDusun = [...new Set(dataPenduduk.map(item => item.dusun))];
-            dusunContainer.innerHTML = '';
-            
-            daftarDusun.forEach(dusun => {
-                const pendudukDiDusun = dataPenduduk.filter(p => p.dusun === dusun);
-                let kolomHTML = `
-                    <div class="dusun-column">
-                        <h3>${dusun}</h3>
-                        <div class="isi-kolom">
-                `;
-                
-                pendudukDiDusun.forEach(p => {
-                    kolomHTML += buatKartu(p);
-                });
-                
-                kolomHTML += `</div></div>`;
-                dusunContainer.innerHTML += kolomHTML;
-            });
-        }
-
-        function hitungStatistik() {
-            const totalPopulasi = dataPenduduk.length;
-            const rumahUnik = new Set(dataPenduduk.map(p => `${p.dusun}-${p.nomor_rumah}`));
-            const totalRumah = rumahUnik.size;
-            const rataRata = totalRumah > 0 ? (totalPopulasi / totalRumah).toFixed(1) : 0;
-
-            totalRumahEl.textContent = totalRumah;
-            totalPopulasiEl.textContent = totalPopulasi;
-            rataRataKeluargaEl.textContent = rataRata;
-
-            const adaDataUsia = dataPenduduk.some(p => p.usia !== undefined);
-            if (adaDataUsia) {
-                const usiaList = dataPenduduk.map(p => p.usia);
-                const minUsia = Math.min(...usiaList);
-                const maxUsia = Math.max(...usiaList);
-                rangeUsiaEl.textContent = `${minUsia} - ${maxUsia} Tahun`;
-                rangeUsiaEl.style.fontSize = "20px";
-            }
-        }
-
-        fetch('data/data_penduduk.json')
-            .then(response => response.json())
-            .then(data => {
-                dataPenduduk = data;
-                hitungStatistik();
-                renderKolomDusun();
-            })
-            .catch(error => {
-                console.error('Gagal memuat data penduduk:', error);
-            });
-
-        searchInput.addEventListener('input', function(e) {
-            const keyword = e.target.value.toLowerCase();
-            
-            if (keyword.length > 0) {
-                searchResults.style.display = 'block';
-                hasilTitle.style.display = 'block';
-                
-                const hasilFilter = dataPenduduk.filter(p => 
-                    p.nama.toLowerCase().includes(keyword) || 
-                    p.nomor_rumah.toLowerCase().includes(keyword)
-                );
-                
-                if (hasilFilter.length > 0) {
-                    searchResults.innerHTML = hasilFilter.map(p => buatKartu(p)).join('');
-                } else {
-                    searchResults.innerHTML = '<p style="text-align:center; color:red;">Data penduduk tidak ditemukan.</p>';
-                }
-            } else {
-                searchResults.style.display = 'none';
-                hasilTitle.style.display = 'none';
-                searchResults.innerHTML = '';
-            }
-        });
-    </script>
+    <!-- Menghubungkan file JavaScript di dalam folder scripts -->
+    <script src="scripts/demografi.js"></script>
 </body>
 </html>

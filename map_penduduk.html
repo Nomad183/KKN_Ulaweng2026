@@ -60,8 +60,10 @@
         h1 { text-align: center; color: #1b5e20; margin-bottom: 5px; }
         p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
 
+        /* Container utama (Default Desktop: Peta di kanan, Sidebar di kiri pakai row-reverse) */
         .app-container {
             display: flex;
+            flex-direction: row-reverse;
             gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
@@ -216,22 +218,25 @@
             color: #555;
         }
 
-        /* Styling Responsif untuk HP / Mobile */
+        /* Responsif HP */
         @media screen and (max-width: 768px) {
             body { padding: 10px; }
+            
+            /* Di HP diubah jadi kolom biasa, karena Peta di HTML ada di atas, maka Peta otomatis tampil duluan */
             .app-container { 
                 flex-direction: column; 
-                gap: 12px; 
             }
+            
+            #map { 
+                height: 400px !important; 
+                min-height: 400px !important;
+                width: 100% !important;
+            }
+            
             .sidebar { 
                 width: 100%; 
                 height: auto; 
-                max-height: 200px; /* Sidebar dikecilkan agar peta langsung muat di layar HP */
-                padding: 12px; 
-            }
-            #map { 
-                height: 450px; 
-                width: 100%; 
+                max-height: none; 
             }
 
             /* Navbar Mobile Horizontal Scroll Fix */
@@ -239,7 +244,7 @@
                 flex-direction: column;
                 align-items: stretch;
                 gap: 10px;
-                padding: 10px 12px;
+                padding: 12px 15px;
             }
             .navbar-links {
                 display: flex;
@@ -274,7 +279,7 @@
             <a href="index.html">Peta Ulaweng</a>
             <a href="apbdes.html">APBDes Desa</a>
             <a href="administrasi.html">Administrasi Desa</a>
-            <a href="penduduk.html">Data Penduduk</a>
+            <a href="penduduk.html" class="active">Data Penduduk</a>
         </div>
     </nav>
 
@@ -282,6 +287,10 @@
     <p class="subtitle">Visualisasi Batas Wilayah dan Daftar Lokasi Penduduk per Dusun</p>
 
     <div class="app-container">
+        <!-- PETA DILETAKKAN DI ATAS AGAR OTOMATIS TAMPIL PERTAMA DI HP -->
+        <div id="map"></div>
+
+        <!-- SIDEBAR / FILTER DIBAWAH PETA -->
         <div class="sidebar">
             <!-- Tombol Navigasi Kembali -->
             <a href="penduduk.html" class="btn-back">⬅️ Kembali ke Data Penduduk</a>
@@ -305,8 +314,6 @@
                 <!-- Daftar kartu penduduk akan dimuat secara dinamis via JavaScript -->
             </div>
         </div>
-
-        <div id="map"></div>
     </div>
 
     <!-- Leaflet JS -->
@@ -324,8 +331,7 @@
         const map = L.map('map', {
             center: [ULAWENG_LAT, ULAWENG_LNG],
             zoom: 14,
-            layers: [satelitLayer],
-            tap: true
+            layers: [satelitLayer]
         });
 
         const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];

@@ -1,0 +1,75 @@
+{
+  "desa": "Ulaweng",
+  "kecamatan": "Samaturu",
+  "tahun": 2026,
+  "ringkasan": {
+    "total_kk": 251,
+    "total_jiwa": 879
+  },
+  "dusun": [
+    {
+      "nama_dusun": "Dusun I Pukara",
+      "jumlah_kk": 61,
+      "jumlah_jiwa": {
+        "laki_laki": 106,
+        "perempuan": 93,
+        "total": 199
+      },
+      "kondisi_rumah": {
+        "kk_memiliki_rumah": 49,
+        "permanen": 29,
+        "non_permanen": 20,
+        "semi_permanen": 0,
+        "tidak_memiliki_rumah": 11
+      }
+    },
+    {
+      "nama_dusun": "Dusun II Ulaweng",
+      "jumlah_kk": 48,
+      "jumlah_jiwa": {
+        "laki_laki": 94,
+        "perempuan": 86,
+        "total": 180
+      },
+      "kondisi_rumah": {
+        "kk_memiliki_rumah": 36,
+        "permanen": 22,
+        "non_permanen": 13,
+        "semi_permanen": 1,
+        "tidak_memiliki_rumah": 12
+      }
+    },
+    {
+      "nama_dusun": "Dusun III Ulana",
+      "jumlah_kk": 44,
+      "jumlah_jiwa": {
+        "laki_laki": 77,
+        "perempuan": 79,
+        "total": 156
+      },
+      "kondisi_rumah": {
+        "kk_memiliki_rumah": 38,
+        "permanen": 19,
+        "non_permanen": 11,
+        "semi_permanen": 4,
+        "tidak_memiliki_rumah": 6
+      }
+    },
+    {
+      "nama_dusun": "Dusun IV Polewali",
+      "jumlah_kk": 98,
+      "jumlah_jiwa": {
+        "laki_laki": 175,
+        "perempuan": 169,
+        "total": 344
+      },
+      "kondisi_rumah": {
+        "kk_memiliki_rumah": 97,
+        "permanen": 26,
+        "non_permanen": 38,
+        "semi_permanen": 7,
+        "tidak_memiliki_rumah": 26
+      }
+    }
+  ]
+}
