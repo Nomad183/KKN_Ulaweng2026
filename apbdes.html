@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APBDes Desa Ulaweng 2026</title>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
+        h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        /* Container Utama */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #28a745;
+        }
+        .summary-card.belanja { border-left-color: #D84315; }
+        .summary-card.pembiayaan { border-left-color: #0288D1; }
+        .summary-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .summary-card .value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #111;
+            margin: 0;
+        }
+
+        /* Section Tables */
+        .card-section {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .card-section h2 {
+            font-size: 18px;
+            color: #1b5e20;
+            margin-top: 0;
+            border-bottom: 2px solid #e8f5e9;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f9fbf9;
+        }
+        .text-right { text-align: right; }
+        .total-row {
+            font-weight: bold;
+            background-color: #f1f8f1;
+        }
+        .sub-item td {
+            padding-left: 30px;
+            color: #555;
+            font-size: 13px;
+        }
+        .bidang-header {
+            background-color: #e8f5e9 !important;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        /* Footer & Collapsible Details Styling */
+        .site-footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 15px 20px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-details summary {
+            cursor: pointer;
+            list-style: none;
+        }
+        .footer-details summary::-webkit-details-marker {
+            display: none;
+        }
+        .footer-title-toggle {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #9ca3af;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .footer-title-toggle:hover {
+            color: #f3f4f6;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            table { font-size: 13px; }
+            th, td { padding: 10px 8px; }
+
+            /* Navbar Mobile Horizontal Scroll Fix */
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+            .navbar-links {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                width: 100%;
+                gap: 8px;
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .navbar-links::-webkit-scrollbar {
+                display: none;
+            }
+            .navbar-links a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar / Bilah Navigasi -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏠</span> KKN Ulaweng 2026
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Peta Ulaweng</a>
+            <a href="apbdes.html" class="active">APBDes Desa</a>
+            <a href="administrasi.html">Administrasi Desa</a>
+            <a href="penduduk.html">Data Penduduk</a>
+            <a href="admin.html">Panel Admin</a>
+        </div>
+    </nav>
+
+    <h1>💰 Transparansi APBDes Desa Ulaweng</h1>
+    <p class="subtitle" id="subtitle-text">Memuat laporan anggaran...</p>
+
+    <!-- Ringkasan Kartu -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <h3>Total Pendapatan Desa</h3>
+            <p class="value" id="val-pendapatan">Memuat...</p>
+        </div>
+        <div class="summary-card belanja">
+            <h3>Total Belanja Desa</h3>
+            <p class="value" id="val-belanja">Memuat...</p>
+        </div>
+        <div class="summary-card pembiayaan">
+            <h3>Total Pembiayaan</h3>
+            <p class="value" id="val-pembiayaan">Memuat...</p>
+        </div>
+    </div>
+
+    <!-- Tabel 1: Pendapatan -->
+    <div class="card-section">
+        <h2>1. Pendapatan Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kelompok / Sumber Pendapatan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
+                </tr>
+            </thead>
+            <tbody id="table-pendapatan-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabel 2: Belanja -->
+    <div class="card-section">
+        <h2>2. Belanja Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Bidang / Sub Bidang Kegiatan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
+                </tr>
+            </thead>
+            <tbody id="table-belanja-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabel 3: Pembiayaan -->
+    <div class="card-section">
+        <h2>3. Pembiayaan Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Uraian Pembiayaan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
+                </tr>
+            </thead>
+            <tbody id="table-pembiayaan-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer KKN -->
+    <footer class="site-footer">
+          <div class="footer-container">
+            <details class="footer-details">
+                <summary class="footer-title-toggle">
+                    <span>Disusun oleh Tim KKN Reguler Desa Ulaweng 2026</span>
+                    <small style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Ketuk untuk Lihat/Tutup ▾</small>
+                </summary>
+                <div class="team-grid">
+                  <span>Ariel Apriadi</span>
+                  <span>Muh. Biyadikal Khoir</span>
+                  <span>Syakira Aulia Annissa</span>
+                  <span>Rifqah Fauziah R</span>
+                  <span>Thoriq Kemal Abillah</span>
+                  <span>Syuk Rina Bte Amirudin</span>
+                  <span>Ucok Marulli Matondang</span>
+                  <span>Muh. Ikhwan Ghazalah Tamar</span>
+                  <span>Sarmila</span>
+                  <span>Regita Zalfa Khalizah Haryanto</span>
+                  <span>Melni Annisatul Mardia</span>
+                  <span>Taufik Hidayat</span>
+                  <span>Indriana</span>
+                  <span>Ela Sukmawati Tamrin</span>
+                  <span>Virji Andini Tri Ramadani Powatu</span>
+                </div>
+            </details>
+          </div>
+    </footer>
+</div>
+
+<!-- Script untuk mengambil data dari apbdes.json -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fungsi pembantu untuk memformat angka menjadi format rupiah (contoh: 1403029730 -> 1.403.029.730)
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID').format(angka);
+        }
+
+        fetch('data/apbdes.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Gagal memuat file apbdes.json");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Subtitle
+                document.getElementById('subtitle-text').textContent = 
+                    `Laporan Realisasi Anggaran Pendapatan dan Belanja Desa ${data.desa} Tahun Anggaran ${data.tahun} (Kec. ${data.kecamatan}, Kab. ${data.kabupaten})`;
+
+                // Summary Cards
+                document.getElementById('val-pendapatan').textContent = "Rp " + formatRupiah(data.pendapatan.total);
+                document.getElementById('val-belanja').textContent = "Rp " + formatRupiah(data.belanja.total);
+                document.getElementById('val-pembiayaan').textContent = "Rp " + formatRupiah(data.pembiayaan.total);
+
+                // 1. Render Pendapatan
+                let tbodyPendapatan = document.getElementById('table-pendapatan-body');
+                tbodyPendapatan.innerHTML = "";
+                data.pendapatan.rincian.forEach(item => {
+                    tbodyPendapatan.innerHTML += `
+                        <tr>
+                            <td>${item.nama}</td>
+                            <td class="text-right">${formatRupiah(item.jumlah)}</td>
+                        </tr>
+                    `;
+                });
+                tbodyPendapatan.innerHTML += `
+                    <tr class="total-row">
+                        <td>Jumlah Pendapatan</td>
+                        <td class="text-right">Rp ${formatRupiah(data.pendapatan.total)}</td>
+                    </tr>
+                `;
+
+                // 2. Render Belanja
+                let tbodyBelanja = document.getElementById('table-belanja-body');
+                tbodyBelanja.innerHTML = "";
+                data.belanja.bidang.forEach(bidang => {
+                    tbodyBelanja.innerHTML += `
+                        <tr class="bidang-header">
+                            <td>${bidang.nama} (${bidang.persentase})</td>
+                            <td class="text-right">${formatRupiah(bidang.jumlah)}</td>
+                        </tr>
+                    `;
+                    bidang.sub_bidang.forEach(sub => {
+                        tbodyBelanja.innerHTML += `
+                            <tr class="sub-item">
+                                <td>- ${sub.nama}</td>
+                                <td class="text-right">${formatRupiah(sub.jumlah)}</td>
+                            </tr>
+                        `;
+                    });
+                });
+                tbodyBelanja.innerHTML += `
+                    <tr class="total-row">
+                        <td>Jumlah Belanja</td>
+                        <td class="text-right">Rp ${formatRupiah(data.belanja.total)}</td>
+                    </tr>
+                `;
+
+                // 3. Render Pembiayaan
+                let tbodyPembiayaan = document.getElementById('table-pembiayaan-body');
+                tbodyPembiayaan.innerHTML = "";
+                tbodyPembiayaan.innerHTML += `
+                    <tr>
+                        <td>Penerimaan Pembiayaan</td>
+                        <td class="text-right">${formatRupiah(data.pembiayaan.penerimaan)}</td>
+                    </tr>
+                    <tr>
+                        <td>Pengeluaran Pembiayaan</td>
+                        <td class="text-right">${formatRupiah(data.pembiayaan.pengeluaran)}</td>
+                    </tr>
+                `;
+                tbodyPembiayaan.innerHTML += `
+                    <tr class="total-row">
+                        <td>Total Pembiayaan (Netto)</td>
+                        <td class="text-right">Rp ${formatRupiah(data.pembiayaan.total)}</td>
+                    </tr>
+                `;
+            })
+            .catch(error => {
+                console.error("Terjadi kesalahan:", error);
+                alert("Gagal memuat data APBDes. Pastikan file apbdes.json berada di dalam folder data.");
+            });
+    });
+</script>
+
+</body>
+</html>

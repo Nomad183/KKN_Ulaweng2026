@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Penduduk - Desa Ulaweng</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar Styling (Konsisten dengan Halaman Lain) */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
+        h1 { text-align: center; color: #1b5e20; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        /* Container utama (Default Desktop: Peta di kanan, Sidebar di kiri pakai row-reverse) */
+        .app-container {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .sidebar {
+            width: 360px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: 580px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            color: #1b5e20;
+            font-size: 16px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+        }
+
+        /* Tombol Kembali ke Penduduk */
+        .btn-back {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            background-color: #455A64;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .btn-back:hover {
+            background-color: #37474F;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-box:focus {
+            border-color: #2E7D32;
+        }
+
+        .dusun-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-dusun {
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            color: #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .btn-dusun:hover {
+            background-color: #e8f5e9;
+            border-color: #2E7D32;
+        }
+
+        .btn-dusun.active {
+            background-color: #2E7D32;
+            color: white;
+            border-color: #2E7D32;
+        }
+
+        .info-count {
+            font-size: 13px;
+            color: #666;
+            background: #f1f8e9;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        /* Daftar List Penduduk di Sidebar */
+        .resident-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .resident-item {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .resident-item:hover {
+            background-color: #f1f8e9;
+            border-color: #2E7D32;
+        }
+
+        .resident-item h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            color: #1b5e20;
+        }
+
+        .resident-item p {
+            margin: 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        #map {
+            flex: 1;
+            height: 580px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .popup-card {
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            min-width: 160px;
+        }
+        .popup-card h4 {
+            margin: 0 0 5px 0;
+            color: #1b5e20;
+        }
+        .popup-card p {
+            margin: 0;
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Responsif HP */
+        @media screen and (max-width: 768px) {
+            body { padding: 10px; }
+            
+            /* Di HP diubah jadi kolom biasa, karena Peta di HTML ada di atas, maka Peta otomatis tampil duluan */
+            .app-container { 
+                flex-direction: column; 
+            }
+            
+            #map { 
+                height: 400px !important; 
+                min-height: 400px !important;
+                width: 100% !important;
+            }
+            
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                max-height: none; 
+            }
+
+            /* Navbar Mobile Horizontal Scroll Fix */
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+            .navbar-links {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                width: 100%;
+                gap: 8px;
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .navbar-links::-webkit-scrollbar {
+                display: none;
+            }
+            .navbar-links a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar / Bilah Navigasi Utama -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏠</span> KKN Ulaweng 2026
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Peta Ulaweng</a>
+            <a href="apbdes.html">APBDes Desa</a>
+            <a href="administrasi.html">Administrasi Desa</a>
+            <a href="penduduk.html" class="active">Data Penduduk</a>
+        </div>
+    </nav>
+
+    <h1>🗺️ Map Penduduk Desa Ulaweng</h1>
+    <p class="subtitle">Visualisasi Batas Wilayah dan Daftar Lokasi Penduduk per Dusun</p>
+
+    <div class="app-container">
+        <!-- PETA DILETAKKAN DI ATAS AGAR OTOMATIS TAMPIL PERTAMA DI HP -->
+        <div id="map"></div>
+
+        <!-- SIDEBAR / FILTER DIBAWAH PETA -->
+        <div class="sidebar">
+            <!-- Tombol Navigasi Kembali -->
+            <a href="penduduk.html" class="btn-back">⬅️ Kembali ke Data Penduduk</a>
+
+            <h3>🔍 Pencarian Penduduk</h3>
+            <input type="text" id="search-input" class="search-box" placeholder="Ketik nama penduduk..." onkeyup="filterData()" />
+
+            <h3>🏘️ Filter Wilayah Dusun</h3>
+            <div class="dusun-filters">
+                <button class="btn-dusun active" onclick="filterDusun('Semua', this)">🌐 Semua Dusun</button>
+                <button class="btn-dusun" onclick="filterDusun('Dusun 1', this)">📍 Dusun 1</button>
+                <button class="btn-dusun" onclick="filterDusun('Dusun 2', this)">📍 Dusun 2</button>
+                <button class="btn-dusun" onclick="filterDusun('Dusun 3', this)">📍 Dusun 3</button>
+                <button class="btn-dusun" onclick="filterDusun('Dusun 4', this)">📍 Dusun 4</button>
+            </div>
+
+            <div class="info-count" id="info-count">Memuat data penduduk...</div>
+
+            <h3>📋 Daftar Lokasi</h3>
+            <div class="resident-list" id="resident-list">
+                <!-- Daftar kartu penduduk akan dimuat secara dinamis via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        const ULAWENG_LAT = -3.952509446024583;
+        const ULAWENG_LNG = 121.33541203412234;
+
+        const satelitLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            maxZoom: 19
+        });
+
+        const map = L.map('map', {
+            center: [ULAWENG_LAT, ULAWENG_LNG],
+            zoom: 14,
+            layers: [satelitLayer]
+        });
+
+        const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
+        let batasDesaLayer = null;
+        let batasDesaBounds = null;
+        let rawPendudukData = [];
+        let markerMap = {}; 
+        let pendudukLayerGroup = L.layerGroup().addTo(map);
+
+        let activeDusun = 'Semua';
+
+        function processGeoJSONGeometry(geometry) {
+            let villageCoords = [];
+            if (geometry.type === 'Polygon') {
+                villageCoords = geometry.coordinates.map(ring => 
+                    ring.map(coord => [coord[1], coord[0]])
+                );
+            } else if (geometry.type === 'MultiPolygon') {
+                villageCoords = geometry.coordinates.map(poly => 
+                    poly.map(ring => ring.map(coord => [coord[1], coord[0]]))
+                ).flat(1);
+            }
+            return villageCoords;
+        }
+
+        fetch('Batas_Desa_Ulaweng.geojson')
+            .then(res => res.json())
+            .then(data => {
+                const feature = data.features[0];
+                const villageCoords = processGeoJSONGeometry(feature.geometry);
+
+                batasDesaLayer = L.polygon([worldBounds, ...villageCoords], {
+                    color: '#111111',
+                    weight: 2,
+                    dashArray: '6, 6',
+                    fillColor: '#000000',
+                    fillOpacity: 0.55
+                }).addTo(map);
+
+                const tempGeoJson = L.geoJSON(data);
+                batasDesaBounds = tempGeoJson.getBounds();
+                map.fitBounds(batasDesaBounds, { padding: [20, 20] });
+            })
+            .catch(err => console.error("Gagal memuat Batas_Desa_Ulaweng.geojson:", err));
+
+        fetch('data/lokasi_penduduk.json')
+            .then(res => res.json())
+            .then(data => {
+                rawPendudukData = data;
+                renderData(rawPendudukData);
+            })
+            .catch(err => {
+                console.error("Gagal memuat lokasi_penduduk.json:", err);
+                document.getElementById('info-count').innerText = "Gagal memuat data penduduk.";
+            });
+
+        function renderData(dataList) {
+            pendudukLayerGroup.clearLayers();
+            markerMap = {};
+            const listContainer = document.getElementById('resident-list');
+            listContainer.innerHTML = '';
+
+            if (dataList.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: #888; font-size: 13px; margin: 10px 0;">Tidak ada data ditemukan.</p>';
+            }
+
+            dataList.forEach((item, index) => {
+                if (item.lat && item.lng) {
+                    const marker = L.marker([item.lat, item.lng]);
+                    
+                    marker.bindPopup(`
+                        <div class="popup-card">
+                            <h4>${item.nama || 'Tanpa Nama'}</h4>
+                            <p><b>${item.dusun || 'Dusun Tidak Diketahui'}</b></p>
+                            <p>${item.alamat || ''}</p>
+                        </div>
+                    `);
+
+                    pendudukLayerGroup.addLayer(marker);
+                    markerMap[index] = marker;
+
+                    const card = document.createElement('div');
+                    card.className = 'resident-item';
+                    card.innerHTML = `
+                        <h4>${item.nama || 'Tanpa Nama'}</h4>
+                        <p><b>${item.dusun || '-'}</b> — ${item.alamat || 'Alamat tidak diisi'}</p>
+                    `;
+
+                    card.onclick = () => {
+                        map.flyTo([item.lat, item.lng], 17, { duration: 1.0 });
+                        marker.openPopup();
+                    };
+
+                    listContainer.appendChild(card);
+                }
+            });
+
+            document.getElementById('info-count').innerText = `Menampilkan ${dataList.length} data penduduk`;
+        }
+
+        function filterDusun(dusunName, btnElement) {
+            activeDusun = dusunName;
+
+            const buttons = document.querySelectorAll('.btn-dusun');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            applyFilters();
+        }
+
+        function filterData() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const keyword = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = rawPendudukData.filter(item => {
+                const namaMatch = (item.nama || '').toLowerCase().includes(keyword);
+                const dusunItem = (item.dusun || '');
+                
+                const matchDusun = (activeDusun === 'Semua' || dusunItem.toLowerCase() === activeDusun.toLowerCase());
+                
+                return namaMatch && matchDusun;
+            });
+
+            renderData(filtered);
+
+            if (filtered.length > 0 && pendudukLayerGroup.getLayers().length > 0) {
+                const groupBounds = L.featureGroup(pendudukLayerGroup.getLayers()).getBounds();
+                if (groupBounds.isValid()) {
+                    map.fitBounds(groupBounds, { padding: [50, 50], maxZoom: 16 });
+                }
+            }
+        }
+    </script>
+</body>
+</html>

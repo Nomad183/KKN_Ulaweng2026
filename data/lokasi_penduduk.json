@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "nama": "Andi Baso",
+    "dusun": "Dusun 1",
+    "alamat": "RT 01 / RW 01",
+    "lat": -3.951200,
+    "lng": 121.333500
+  },
+  {
+    "id": 2,
+    "nama": "Sitti Aminah",
+    "dusun": "Dusun 1",
+    "alamat": "RT 02 / RW 01",
+    "lat": -3.950800,
+    "lng": 121.334200
+  },
+  {
+    "id": 3,
+    "nama": "La Ode Mursalim",
+    "dusun": "Dusun 2",
+    "alamat": "RT 01 / RW 02",
+    "lat": -3.953100,
+    "lng": 121.336100
+  },
+  {
+    "id": 4,
+    "nama": "Wahyuddin",
+    "dusun": "Dusun 2",
+    "alamat": "RT 02 / RW 02",
+    "lat": -3.953800,
+    "lng": 121.337000
+  },
+  {
+    "id": 5,
+    "nama": "Sitti Rahma",
+    "dusun": "Dusun 3",
+    "alamat": "RT 01 / RW 03",
+    "lat": -3.950100,
+    "lng": 121.337500
+  },
+  {
+    "id": 6,
+    "nama": "Baharuddin",
+    "dusun": "Dusun 3",
+    "alamat": "RT 02 / RW 03",
+    "lat": -3.949200,
+    "lng": 121.338200
+  },
+  {
+    "id": 7,
+    "nama": "Nurul Hidayah",
+    "dusun": "Dusun 4",
+    "alamat": "RT 01 / RW 04",
+    "lat": -3.955200,
+    "lng": 121.333200
+  },
+  {
+    "id": 8,
+    "nama": "Muh. Alif",
+    "dusun": "Dusun 4",
+    "alamat": "RT 02 / RW 04",
+    "lat": -3.955900,
+    "lng": 121.334500
+  }
+]

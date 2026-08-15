@@ -1,0 +1,23 @@
+{
+"type": "FeatureCollection",
+"name": "POI_Desa_Ulaweng",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{"type":"Feature","properties":{"fid":1,"Keterangan":"Batas Desa","foto":"batas_desa_ulaweng.jpeg"},"geometry":{"type":"Point","coordinates":[121.341903335685743,-3.944939596145802]}},
+{"type":"Feature","properties":{"fid":2,"Keterangan":"Kepala Dusun 1","foto":"kepala_dusun_1.jpeg"},"geometry":{"type":"Point","coordinates":[121.338748547195848,-3.947458027798423]}},
+{"type":"Feature","properties":{"fid":3,"Keterangan":"Puskemas Pembantu","foto":"puskesmas_pembantu.jpeg"},"geometry":{"type":"Point","coordinates":[121.337568823495076,-3.949600538517231]}},
+{"type":"Feature","properties":{"fid":4,"Keterangan":"TK Uswatul Khasanah","foto":"tk_uswatul_hasanah.jpeg"},"geometry":{"type":"Point","coordinates":[121.336294137515011,-3.950045072361319]}},
+{"type":"Feature","properties":{"fid":5,"Keterangan":"Kepala Dusun 2","foto":"kepala_desa_2.jpeg"},"geometry":{"type":"Point","coordinates":[121.33617726086355,-3.949964910538182]}},
+{"type":"Feature","properties":{"fid":6,"Keterangan":"Masjid Baiturrahman","foto":"masjid_baiturrahman.jpeg"},"geometry":{"type":"Point","coordinates":[121.33622422338027,-3.95084824421175]}},
+{"type":"Feature","properties":{"fid":7,"Keterangan":"Kepala Dusun 3","foto":"kepala_dusun_3.jpeg"},"geometry":{"type":"Point","coordinates":[121.335485541098038,-3.951690283499122]}},
+{"type":"Feature","properties":{"fid":8,"Keterangan":"Tugu Bandeng & Udang","foto":"tugu_bandeng&udang.jpeg"},"geometry":{"type":"Point","coordinates":[121.334622140873222,-3.953366483618063]}},
+{"type":"Feature","properties":{"fid":9,"Keterangan":"SDN 1 Ulaweng","foto":"sdn_1_ulaweng.jpeg"},"geometry":{"type":"Point","coordinates":[121.335127426232063,-3.95388769551913]}},
+{"type":"Feature","properties":{"fid":10,"Keterangan":"Kepala Desa","foto":"rumah_kepala_desa.jpeg"},"geometry":{"type":"Point","coordinates":[121.334837990929415,-3.954029621707726]}},
+{"type":"Feature","properties":{"fid":11,"Keterangan":"Kepala Dusun 4","foto":"kepala_dusun_4.jpeg"},"geometry":{"type":"Point","coordinates":[121.334489687429638,-3.954372202062833]}},
+{"type":"Feature","properties":{"fid":12,"Keterangan":"Mushola","foto":"mushola.jpeg"},"geometry":{"type":"Point","coordinates":[121.334867425028023,-3.954851814322101]}},
+{"type":"Feature","properties":{"fid":13,"Keterangan":"Balai Desa","foto":"balai_desa.jpeg"},"geometry":{"type":"Point","coordinates":[121.335061199510264,-3.955588361179826]}},
+{"type":"Feature","properties":{"fid":14,"Keterangan":"Posyandu","foto":"posyandu.jpeg"},"geometry":{"type":"Point","coordinates":[121.335012142679304,-3.955713158090858]}},
+{"type":"Feature","properties":{"fid":15,"Keterangan":"Sekretaris Desa","foto":"sekretaris_desa.jpeg"},"geometry":{"type":"Point","coordinates":[121.334261854599063,-3.95412312673139]}},
+{"type":"Feature","properties":{"fid":16,"Keterangan":"Pantai Jodoh","foto":"pantai_jodoh.jpeg"},"geometry":{"type":"Point","coordinates":[121.330862422431366,-3.957235921913137]}}
+]
+}
