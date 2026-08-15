@@ -1,0 +1,31 @@
+name: Update JSON Data via Admin
+
+on:
+  repository_dispatch:
+    types: [update_json]
+
+permissions:
+  contents: write
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Write JSON file
+        env:
+          FILE_PATH: ${{ github.event.client_payload.file_path }}
+          FILE_CONTENT: ${{ github.event.client_payload.content }}
+        run: |
+          # Pastikan direktori tujuan ada
+          mkdir -p $(dirname "$FILE_PATH")
+          # Tulis konten JSON baru ke file tujuan
+          echo "$FILE_CONTENT" > "$FILE_PATH"
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-update JSON via Web Admin Panel"
+          branch: main

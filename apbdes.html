@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APBDes Desa Ulaweng</title>
+    <title>APBDes Desa Ulaweng 2026</title>
 
     <style>
         * { box-sizing: border-box; }
@@ -61,25 +61,6 @@
         .container {
             max-width: 1100px;
             margin: 0 auto;
-        }
-
-        /* Warning Banner Dummy Data */
-        .warning-banner {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        }
-        .warning-banner span {
-            font-size: 18px;
         }
 
         /* Summary Cards */
@@ -149,6 +130,16 @@
         .total-row {
             font-weight: bold;
             background-color: #f1f8f1;
+        }
+        .sub-item td {
+            padding-left: 30px;
+            color: #555;
+            font-size: 13px;
+        }
+        .bidang-header {
+            background-color: #e8f5e9 !important;
+            font-weight: bold;
+            color: #1b5e20;
         }
 
         /* Footer & Collapsible Details Styling */
@@ -250,31 +241,26 @@
             <a href="apbdes.html" class="active">APBDes Desa</a>
             <a href="administrasi.html">Administrasi Desa</a>
             <a href="penduduk.html">Data Penduduk</a>
+            <a href="admin.html">Panel Admin</a>
         </div>
     </nav>
 
     <h1>💰 Transparansi APBDes Desa Ulaweng</h1>
-    <p class="subtitle">Laporan Realisasi Anggaran Pendapatan dan Belanja Desa Ulaweng Tahun Anggaran 2026</p>
-
-    <!-- Peringatan Data Dummy -->
-    <div class="warning-banner">
-        <span>⚠️</span>
-        <div>PERHATIAN: Halaman ini saat ini masih menggunakan <strong>data dummy / contoh sementara</strong>. Angka dan rincian anggaran di bawah ini akan segera diperbarui sesuai dengan data riil Desa Ulaweng.</div>
-    </div>
+    <p class="subtitle" id="subtitle-text">Memuat laporan anggaran...</p>
 
     <!-- Ringkasan Kartu -->
     <div class="summary-grid">
         <div class="summary-card">
             <h3>Total Pendapatan Desa</h3>
-            <p class="value">Rp 1.450.000.000</p>
+            <p class="value" id="val-pendapatan">Memuat...</p>
         </div>
         <div class="summary-card belanja">
             <h3>Total Belanja Desa</h3>
-            <p class="value">Rp 1.482.500.000</p>
+            <p class="value" id="val-belanja">Memuat...</p>
         </div>
         <div class="summary-card pembiayaan">
-            <h3>Pembiayaan Netto</h3>
-            <p class="value">Rp 32.500.000</p>
+            <h3>Total Pembiayaan</h3>
+            <p class="value" id="val-pembiayaan">Memuat...</p>
         </div>
     </div>
 
@@ -284,36 +270,12 @@
         <table>
             <thead>
                 <tr>
-                    <th>Kode Rekening</th>
-                    <th>Uraian Bidang / Sumber Pendapatan</th>
-                    <th class="text-right">Anggaran (Rp)</th>
+                    <th>Kelompok / Sumber Pendapatan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>4.1</td>
-                    <td>Pendapatan Asli Desa (PADes)</td>
-                    <td class="text-right">45.000.000</td>
-                </tr>
-                <tr>
-                    <td>4.2</td>
-                    <td>Dana Desa (DD)</td>
-                    <td class="text-right" style="white-space: nowrap;">980.000.000</td>
-                </tr>
-                <tr>
-                    <td>4.3</td>
-                    <td>Bagian dari Hasil Pajak dan Retribusi Daerah (BHPR)</td>
-                    <td class="text-right">65.000.000</td>
-                </tr>
-                <tr>
-                    <td>4.4</td>
-                    <td>Alokasi Dana Desa (ADD)</td>
-                    <td class="text-right">360.000.000</td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2">Jumlah Pendapatan</td>
-                    <td class="text-right">Rp 1.450.000.000</td>
-                </tr>
+            <tbody id="table-pendapatan-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -324,46 +286,33 @@
         <table>
             <thead>
                 <tr>
-                    <th>Kode Rekening</th>
-                    <th>Bidang Kegiatan</th>
-                    <th class="text-right">Anggaran (Rp)</th>
+                    <th>Bidang / Sub Bidang Kegiatan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>5.1</td>
-                    <td>Penyelenggaraan Pemerintahan Desa</td>
-                    <td class="text-right">450.000.000</td>
-                </tr>
-                <tr>
-                    <td>5.2</td>
-                    <td>Pelaksanaan Pembangunan Desa</td>
-                    <td class="text-right">650.000.000</td>
-                </tr>
-                <tr>
-                    <td>5.3</td>
-                    <td>Pembinaan Kemasyarakatan Desa</td>
-                    <td class="text-right">120.000.000</td>
-                </tr>
-                <tr>
-                    <td>5.4</td>
-                    <td>Pemberdayaan Masyarakat Desa</td>
-                    <td class="text-right">182.500.000</td>
-                </tr>
-                <tr>
-                    <td>5.5</td>
-                    <td>Penanggulangan Bencana, Darurat dan Mendesak Desa</td>
-                    <td class="text-right">80.000.000</td>
-                </tr>
-                <tr class="total-row">
-                    <td colspan="2">Jumlah Belanja</td>
-                    <td class="text-right">Rp 1.482.500.000</td>
-                </tr>
+            <tbody id="table-belanja-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Footer KKN (Collapsible / Close & Open) -->
+    <!-- Tabel 3: Pembiayaan -->
+    <div class="card-section">
+        <h2>3. Pembiayaan Desa</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Uraian Pembiayaan</th>
+                    <th class="text-right">Jumlah (Rp)</th>
+                </tr>
+            </thead>
+            <tbody id="table-pembiayaan-body">
+                <tr><td colspan="2" style="text-align: center;">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer KKN -->
     <footer class="site-footer">
           <div class="footer-container">
             <details class="footer-details">
@@ -392,6 +341,102 @@
           </div>
     </footer>
 </div>
+
+<!-- Script untuk mengambil data dari apbdes.json -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fungsi pembantu untuk memformat angka menjadi format rupiah (contoh: 1403029730 -> 1.403.029.730)
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID').format(angka);
+        }
+
+        fetch('data/apbdes.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Gagal memuat file apbdes.json");
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Subtitle
+                document.getElementById('subtitle-text').textContent = 
+                    `Laporan Realisasi Anggaran Pendapatan dan Belanja Desa ${data.desa} Tahun Anggaran ${data.tahun} (Kec. ${data.kecamatan}, Kab. ${data.kabupaten})`;
+
+                // Summary Cards
+                document.getElementById('val-pendapatan').textContent = "Rp " + formatRupiah(data.pendapatan.total);
+                document.getElementById('val-belanja').textContent = "Rp " + formatRupiah(data.belanja.total);
+                document.getElementById('val-pembiayaan').textContent = "Rp " + formatRupiah(data.pembiayaan.total);
+
+                // 1. Render Pendapatan
+                let tbodyPendapatan = document.getElementById('table-pendapatan-body');
+                tbodyPendapatan.innerHTML = "";
+                data.pendapatan.rincian.forEach(item => {
+                    tbodyPendapatan.innerHTML += `
+                        <tr>
+                            <td>${item.nama}</td>
+                            <td class="text-right">${formatRupiah(item.jumlah)}</td>
+                        </tr>
+                    `;
+                });
+                tbodyPendapatan.innerHTML += `
+                    <tr class="total-row">
+                        <td>Jumlah Pendapatan</td>
+                        <td class="text-right">Rp ${formatRupiah(data.pendapatan.total)}</td>
+                    </tr>
+                `;
+
+                // 2. Render Belanja
+                let tbodyBelanja = document.getElementById('table-belanja-body');
+                tbodyBelanja.innerHTML = "";
+                data.belanja.bidang.forEach(bidang => {
+                    tbodyBelanja.innerHTML += `
+                        <tr class="bidang-header">
+                            <td>${bidang.nama} (${bidang.persentase})</td>
+                            <td class="text-right">${formatRupiah(bidang.jumlah)}</td>
+                        </tr>
+                    `;
+                    bidang.sub_bidang.forEach(sub => {
+                        tbodyBelanja.innerHTML += `
+                            <tr class="sub-item">
+                                <td>- ${sub.nama}</td>
+                                <td class="text-right">${formatRupiah(sub.jumlah)}</td>
+                            </tr>
+                        `;
+                    });
+                });
+                tbodyBelanja.innerHTML += `
+                    <tr class="total-row">
+                        <td>Jumlah Belanja</td>
+                        <td class="text-right">Rp ${formatRupiah(data.belanja.total)}</td>
+                    </tr>
+                `;
+
+                // 3. Render Pembiayaan
+                let tbodyPembiayaan = document.getElementById('table-pembiayaan-body');
+                tbodyPembiayaan.innerHTML = "";
+                tbodyPembiayaan.innerHTML += `
+                    <tr>
+                        <td>Penerimaan Pembiayaan</td>
+                        <td class="text-right">${formatRupiah(data.pembiayaan.penerimaan)}</td>
+                    </tr>
+                    <tr>
+                        <td>Pengeluaran Pembiayaan</td>
+                        <td class="text-right">${formatRupiah(data.pembiayaan.pengeluaran)}</td>
+                    </tr>
+                `;
+                tbodyPembiayaan.innerHTML += `
+                    <tr class="total-row">
+                        <td>Total Pembiayaan (Netto)</td>
+                        <td class="text-right">Rp ${formatRupiah(data.pembiayaan.total)}</td>
+                    </tr>
+                `;
+            })
+            .catch(error => {
+                console.error("Terjadi kesalahan:", error);
+                alert("Gagal memuat data APBDes. Pastikan file apbdes.json berada di dalam folder data.");
+            });
+    });
+</script>
 
 </body>
 </html>

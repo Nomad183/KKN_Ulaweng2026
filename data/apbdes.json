@@ -1,0 +1,80 @@
+{
+  "tahun": 2026,
+  "desa": "Ulaweng",
+  "kecamatan": "Samaturu",
+  "kabupaten": "Kolaka",
+  "pendapatan": {
+    "total": 1403029730,
+    "rincian": [
+      { "nama": "Pendapatan Asli Desa (PADesa)", "jumlah": 350000000 },
+      { "nama": "Dana Desa", "jumlah": 266590000 },
+      { "nama": "Alokasi Dana Desa (ADD)", "jumlah": 677847430 },
+      { "nama": "Bagi Hasil Pajak dan Retribusi", "jumlah": 103592300 },
+      { "nama": "Bunga Bank", "jumlah": 5000000 }
+    ]
+  },
+  "pembiayaan": {
+    "total": 217420225,
+    "penerimaan": 289327265,
+    "pengeluaran": 71907040
+  },
+  "belanja": {
+    "total": 1620449955,
+    "bidang": [
+      {
+        "nama": "Bidang Pemerintahan Desa",
+        "persentase": "39,49%",
+        "jumlah": 639885564,
+        "sub_bidang": [
+          { "nama": "Penyelenggara Belanja Siltap, Tunjangan dan Operasional Pemerintah Desa", "jumlah": 358464012 },
+          { "nama": "Penyediaan Sarana Prasarana Pemerintah Desa", "jumlah": 54002729 },
+          { "nama": "Pengelolaan Administrasi Kependudukan, Pencatatan Sipil, Statistik & Kearsipan", "jumlah": 9500000 },
+          { "nama": "Penyelenggaraan Tata Praja Pemerintahan, Perencanaan Keuangan dan Pelaporan", "jumlah": 6828832 },
+          { "nama": "Sub Bidang Pertanahan", "jumlah": 11000000 }
+        ]
+      },
+      {
+        "nama": "Bidang Pembangunan Desa",
+        "persentase": "17,44%",
+        "jumlah": 282618201,
+        "sub_bidang": [
+          { "nama": "Sub Bidang Pendidikan", "jumlah": 18000000 },
+          { "nama": "Sub Bidang Kesehatan", "jumlah": 124000000 },
+          { "nama": "Sub Bidang Pekerjaan Umum dan Penataan Ruang", "jumlah": 71990000 },
+          { "nama": "Sub Bidang Kehutanan dan Lingkungan Hidup", "jumlah": 4128201 },
+          { "nama": "Sub Bidang Perhubungan, Komunikasi dan Informatika", "jumlah": 12500000 },
+          { "nama": "Sub Bidang Energi dan Sumberdaya Mineral", "jumlah": 52000000 }
+        ]
+      },
+      {
+        "nama": "Bidang Pembinaan Kemasyarakatan",
+        "persentase": "13,11%",
+        "jumlah": 241800000,
+        "sub_bidang": [
+          { "nama": "Sub Bidang Ketenteraman, Ketertiban Umum dan Perlindungan Masyarakat", "jumlah": 37200000 },
+          { "nama": "Sub Bidang Kebudayaan dan Keagamaan", "jumlah": 62500000 },
+          { "nama": "Sub Bidang Kepemudaan dan Olahraga", "jumlah": 15000000 },
+          { "nama": "Sub Bidang Kelembagaan Masyarakat", "jumlah": 127100000 }
+        ]
+      },
+      {
+        "nama": "Bidang Pemberdayaan Masyarakat",
+        "persentase": "2,47%",
+        "jumlah": 40000000,
+        "sub_bidang": [
+          { "nama": "Sub Bidang Peningkatan Kapasitas Aparatur Desa", "jumlah": 25000000 },
+          { "nama": "Sub Bidang Dukungan Penanaman Modal", "jumlah": 15000000 }
+        ]
+      },
+      {
+        "nama": "Bidang Penanggulangan Bencana, Keadaan Darurat & Mendesak",
+        "persentase": "25,68%",
+        "jumlah": 416146190,
+        "sub_bidang": [
+          { "nama": "Sub Bidang Penanggulangan Bencana", "jumlah": 372946190 },
+          { "nama": "Sub Bidang Keadaan Mendesak", "jumlah": 43200000 }
+        ]
+      }
+    ]
+  }
+}
