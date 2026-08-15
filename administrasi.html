@@ -63,25 +63,6 @@
             margin: 0 auto;
         }
 
-        /* Warning Banner Data Belum Lengkap */
-        .warning-banner {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        }
-        .warning-banner span {
-            font-size: 18px;
-        }
-
         /* Info Banner */
         .info-banner {
             background-color: #e8f5e9;
@@ -100,7 +81,60 @@
             font-size: 20px;
         }
 
-        /* Grid Dokumen */
+        /* Prosedur Pengajuan Section */
+        .procedure-container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            text-align: center;
+            border-top: 4px solid #28a745;
+        }
+        .procedure-container h2 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .procedure-container > p {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .procedure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .procedure-card {
+            padding: 15px;
+            text-align: center;
+        }
+        .procedure-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #1b5e20;
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            font-size: 24px;
+        }
+        .procedure-card h3 {
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .procedure-card p {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Grid Layanan Surat */
         .doc-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -110,13 +144,14 @@
 
         .doc-card {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             border-top: 4px solid #28a745;
+            position: relative;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .doc-card:hover {
@@ -124,17 +159,31 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.08);
         }
 
+        .badge-gratis {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #d1fae5;
+            color: #065f46;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
         .doc-header {
             display: flex;
             align-items: flex-start;
             gap: 12px;
             margin-bottom: 15px;
+            padding-right: 50px; /* Space for badge */
         }
         .doc-icon {
             font-size: 28px;
             background: #f1f8f1;
             padding: 10px;
             border-radius: 8px;
+            flex-shrink: 0;
         }
         .doc-title-group h3 {
             margin: 0 0 5px 0;
@@ -148,32 +197,35 @@
             line-height: 1.4;
         }
 
-        .doc-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .doc-body {
             border-top: 1px solid #eee;
-            padding-top: 12px;
+            padding-top: 15px;
             margin-top: 10px;
+        }
+        .requirements-title {
             font-size: 12px;
-            color: #888;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-
-        .btn-download {
-            background-color: #28a745;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
             font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background-color 0.2s;
+            color: #334155;
         }
-        .btn-download:hover {
-            background-color: #218838;
+        .requirements-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .requirements-list li span {
+            color: #10b981;
+            margin-right: 8px;
+            font-weight: bold;
         }
 
         /* Footer & Collapsible Details Styling */
@@ -192,7 +244,7 @@
         }
         .footer-details summary {
             cursor: pointer;
-            list-style: none; /* Hilangkan segitiga bawaan browser */
+            list-style: none;
         }
         .footer-details summary::-webkit-details-marker {
             display: none;
@@ -232,7 +284,6 @@
             body { padding: 12px; }
             .doc-grid { grid-template-columns: 1fr; }
 
-            /* Navbar Mobile Horizontal Scroll Fix */
             .navbar {
                 flex-direction: column;
                 align-items: stretch;
@@ -270,7 +321,8 @@
             <span>🏠</span> KKN Ulaweng 2026
         </div>
         <div class="navbar-links">
-            <a href="index.html">Peta Ulaweng</a>
+            <a href="index.html">Beranda</a>
+            <a href="peta_ulaweng.html">Peta Ulaweng</a>
             <a href="apbdes.html">APBDes Desa</a>
             <a href="administrasi.html" class="active">Administrasi Desa</a>
             <a href="penduduk.html">Data Penduduk</a>
@@ -278,123 +330,177 @@
         </div>
     </nav>
 
-    <h1>📂 Layanan Administrasi & Unduh Berkas Desa Ulaweng</h1>
-    <p class="subtitle">Pusat unduhan formulir surat dan dokumen administrasi kependudukan resmi Desa Ulaweng</p>
-
-    <!-- Peringatan Data Belum Lengkap -->
-    <div class="warning-banner">
-        <span>⚠️</span>
-        <div>PERHATIAN: Halaman ini beserta daftar berkas formulir di bawah ini masih dalam tahap penyusunan dan menggunakan <strong>data/contoh sementara</strong>. Dokumen dan layanan lengkap akan segera diperbarui.</div>
-    </div>
+    <h1>📂 Informasi Layanan Administrasi Desa Ulaweng</h1>
+    <p class="subtitle">Panduan persyaratan dan layanan pembuatan surat keterangan resmi Desa Ulaweng</p>
 
     <!-- Info Banner -->
     <div class="info-banner">
         <span>ℹ️</span>
-        <div>Silakan unduh berkas formulir di bawah ini sesuai dengan keperluan Anda. Cetak formulir dan lengkapi datanya sebelum dibawa ke Kantor Desa Ulaweng untuk proses verifikasi lebih lanjut.</div>
+        <div>Silakan periksa persyaratan layanan di bawah ini. Siapkan dokumen pendukung yang diperlukan lalu kunjungi Kantor Desa Ulaweng untuk proses pengisian formulir dan verifikasi.</div>
     </div>
 
-    <!-- Daftar Berkas / Dokumen -->
+    <!-- PROSEDUR PENGAJUAN -->
+    <div class="procedure-container">
+        <h2>Prosedur Pengajuan</h2>
+        <p>Ikuti 4 langkah mudah untuk mendapatkan dokumen Anda di Desa Ulaweng</p>
+        
+        <div class="procedure-grid">
+            <!-- Step 1 -->
+            <div class="procedure-card">
+                <div class="procedure-icon">📄</div>
+                <h3>1. Persiapan</h3>
+                <p>Siapkan dokumen pendukung seperti KTP, KK, dan berkas lainnya.</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="procedure-card">
+                <div class="procedure-icon">✍️</div>
+                <h3>2. Pengajuan</h3>
+                <p>Pilih jenis layanan dan kunjungi kantor desa untuk pengisian formulir.</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="procedure-card">
+                <div class="procedure-icon">⚙️</div>
+                <h3>3. Verifikasi</h3>
+                <p>Admin desa akan meninjau data dan memproses dokumen Anda.</p>
+            </div>
+            <!-- Step 4 -->
+            <div class="procedure-card">
+                <div class="procedure-icon">✅</div>
+                <h3>4. Selesai</h3>
+                <p>Ambil dokumen fisik yang sudah jadi langsung di kantor desa.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daftar Berkas / Layanan Surat -->
     <div class="doc-grid">
 
-        <!-- Dokumen 1: Surat Keterangan Dokter Kecelakaan & Cacat Tetap -->
+        <!-- Dokumen 1: Surat Keterangan Domisili -->
         <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
             <div>
                 <div class="doc-header">
-                    <div class="doc-icon">📄</div>
+                    <div class="doc-icon">📍</div>
                     <div class="doc-title-group">
-                        <h3>Formulir Surat Keterangan Dokter (Kecelakaan & Cacat Tetap)</h3>
-                        <p>Format surat keterangan medis untuk pengobatan/perawatan, meninggal dunia, atau cacat tetap akibat kecelakaan.</p>
+                        <h3>Surat Keterangan Domisili</h3>
+                        <p>Digunakan sebagai bukti sah alamat tinggal penduduk di wilayah Desa Ulaweng.</p>
                     </div>
                 </div>
             </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Form_Suket_Dokter_Kecelakaan.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> Fotokopi Kartu Keluarga (KK)</li>
+                    <li><span>✔</span> Fotokopi KTP</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Dokumen 2: Surat Pengantar KTP / KK -->
+        <!-- Dokumen 2: Surat Keterangan Tidak Mampu -->
         <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
             <div>
                 <div class="doc-header">
-                    <div class="doc-icon">🪪</div>
+                    <div class="doc-icon">💳</div>
                     <div class="doc-title-group">
-                        <h3>Surat Pengantar Pembuatan KTP & KK</h3>
-                        <p>Formulir pengantar resmi dari desa untuk pengurusan kartu tanda penduduk baru atau pembaruan kartu keluarga.</p>
+                        <h3>Surat Keterangan Tidak Mampu</h3>
+                        <p>Untuk keperluan keringanan biaya pendidikan, kesehatan, atau bantuan sosial lainnya.</p>
                     </div>
                 </div>
             </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Surat_Pengantar_KTP_KK.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> Pengantar RT/Kepala Dusun</li>
+                    <li><span>✔</span> Fotokopi KK & KTP</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Dokumen 3: Surat Keterangan Tidak Mampu (SKTM) -->
+        <!-- Dokumen 3: Surat Keterangan Usaha -->
         <div class="doc-card">
-            <div>
-                <div class="doc-header">
-                    <div class="doc-icon">📋</div>
-                    <div class="doc-title-group">
-                        <h3>Surat Keterangan Tidak Mampu (SKTM)</h3>
-                        <p>Formulir pengajuan keterangan kurang mampu untuk keperluan keringanan biaya kesehatan, pendidikan, atau bantuan sosial.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Surat_Keterangan_Tidak_Mampu.pdf" download class="btn-download">📥 Unduh Berkas</a>
-            </div>
-        </div>
-
-        <!-- Dokumen 4: Surat Keterangan Usaha (SKU) -->
-        <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
             <div>
                 <div class="doc-header">
                     <div class="doc-icon">🏪</div>
                     <div class="doc-title-group">
-                        <h3>Surat Keterangan Usaha (SKU)</h3>
-                        <p>Formulir pengajuan kepemilikan usaha atau UMKM bagi warga desa untuk keperluan administrasi perbankan/legalitas.</p>
+                        <h3>Surat Keterangan Usaha</h3>
+                        <p>Syarat administrasi pembukaan rekening bank atau pengajuan modal UMKM.</p>
                     </div>
                 </div>
             </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Surat_Keterangan_Usaha.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> KTP Asli/Fotokopi</li>
+                    <li><span>✔</span> Nomor HP Aktif</li>
+                    <li><span>✔</span> Menyebutkan Jenis Usaha</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Dokumen 5: Surat Keterangan Domisili -->
+        <!-- Dokumen 4: Surat Keterangan Kematian -->
         <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
             <div>
                 <div class="doc-header">
-                    <div class="doc-icon">🏠</div>
+                    <div class="doc-icon">📋</div>
                     <div class="doc-title-group">
-                        <h3>Surat Keterangan Domisili</h3>
-                        <p>Formulir keterangan tempat tinggal tetap atau domisili sementara bagi warga yang beraktivitas di wilayah Desa Ulaweng.</p>
+                        <h3>Surat Keterangan Kematian</h3>
+                        <p>Dokumen resmi untuk pelaporan peristiwa kematian warga desa.</p>
                     </div>
                 </div>
             </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Surat_Keterangan_Domisili.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> Ket. Meninggal dr Dokter/RS</li>
+                    <li><span>✔</span> Fotokopi KK & KTP Pelapor</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Dokumen 6: Surat Keterangan Kelahiran / Kematian -->
+        <!-- Dokumen 5: Akte / Ket. Kelahiran -->
         <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
             <div>
                 <div class="doc-header">
-                    <div class="doc-icon">📜</div>
+                    <div class="doc-icon">👶</div>
                     <div class="doc-title-group">
-                        <h3>Surat Keterangan Kelahiran & Kematian</h3>
-                        <p>Formulir pelaporan pencatatan sipil peristiwa penting kelahiran atau kematian warga di lingkup Desa Ulaweng.</p>
+                        <h3>Akte / Ket. Kelahiran</h3>
+                        <p>Pencatatan kelahiran baru untuk penerbitan NIK dan pembaruan KK.</p>
                     </div>
                 </div>
             </div>
-            <div class="doc-footer">
-                <span>Format: PDF (.pdf)</span>
-                <a href="files/Surat_Kelahiran_Kematian.pdf" download class="btn-download">📥 Unduh Berkas</a>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> Formulir f.2-0.-1</li>
+                    <li><span>✔</span> Surat Ket. Bidan/RS</li>
+                    <li><span>✔</span> FC KTP Orang Tua & 2 Saksi</li>
+                    <li><span>✔</span> FC Buku Nikah</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Dokumen 6: Pengantar SKCK -->
+        <div class="doc-card">
+            <span class="badge-gratis">GRATIS</span>
+            <div>
+                <div class="doc-header">
+                    <div class="doc-icon">🛡️</div>
+                    <div class="doc-title-group">
+                        <h3>Pengantar SKCK</h3>
+                        <p>Surat pengantar desa untuk pengurusan SKCK di tingkat Polsek/Polres.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="doc-body">
+                <div class="requirements-title">Persyaratan:</div>
+                <ul class="requirements-list">
+                    <li><span>✔</span> Fotokopi KK</li>
+                    <li><span>✔</span> Fotokopi KTP</li>
+                </ul>
             </div>
         </div>
 

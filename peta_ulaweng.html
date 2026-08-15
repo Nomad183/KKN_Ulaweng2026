@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Interaktif Desa Ulaweng</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #ffffff;
+            color: #333;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .navbar-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar-links a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .navbar-links a:hover, .navbar-links a.active {
+            background-color: #e8f5e9;
+            color: #28a745;
+        }
+
+        h1 { text-align: center; margin-bottom: 5px; color: #1b5e20; }
+        p.subtitle { text-align: center; color: #666; margin-top: 0; margin-bottom: 20px; }
+
+        /* Navigation Mode Utama */
+        .mode-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-mode {
+            padding: 12px 20px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+        }
+
+        .btn-mode.active {
+            border-color: #111;
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        #mode-potensi { background-color: #2E7D32; color: white; }
+        #mode-fasilitas { background-color: #D84315; color: white; }
+        #mode-umkm { background-color: #E65100; color: white; }
+
+        /* Filter Controls Container */
+        .controls, .actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        button, .btn-gmaps {
+            padding: 9px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover, .btn-gmaps:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Filter Sektor Potensi */
+        #btn-default { background-color: #455A64; color: white; }
+        #btn-semua   { background-color: #37474F; color: white; }
+        #btn-sawah   { background-color: #2E7D32; color: white; }
+        #btn-tambak  { background-color: #00ACC1; color: white; }
+        #btn-laut    { background-color: #1565C0; color: white; }
+        #btn-kelapa  { background-color: #F57F17; color: white; }
+
+        /* Filter Fasilitas Desa */
+        .btn-fas-filter { 
+            background-color: #ffffff; 
+            color: #333; 
+            border: 1px solid #ccc; 
+            white-space: nowrap; 
+        }
+        .btn-fas-filter.active-fas { 
+            background-color: #D84315; 
+            color: white; 
+            border-color: #D84315; 
+        }
+
+        /* Map Canvas */
+        #map {
+            height: 580px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
+        }
+
+        /* Custom Marker Container Styling */
+        .custom-poi-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 15px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.35);
+            border: 2px solid #ffffff;
+            transition: transform 0.2s ease;
+        }
+        .custom-poi-marker:hover {
+            transform: scale(1.2);
+            z-index: 1000 !important;
+        }
+
+        /* Custom Marker Lokasi Saya (Pulse Animation) */
+        .user-location-container {
+            position: relative;
+        }
+        .user-location-pin {
+            width: 16px;
+            height: 16px;
+            background-color: #8E24AA;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        .user-location-pulse {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(142, 36, 170, 0.4);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-ring 1.8s infinite ease-out;
+            z-index: 1;
+        }
+        @keyframes pulse-ring {
+            0% {
+                transform: translate(-50%, -50%) scale(0.4);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2.2);
+                opacity: 0;
+            }
+        }
+
+        /* Popup Card Styling */
+        .popup-card {
+            font-family: 'Segoe UI', sans-serif;
+            width: 210px;
+            text-align: center;
+        }
+        .popup-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #eee;
+            background-color: #f0f0f0;
+        }
+        .popup-card h3 {
+            margin: 4px 0;
+            font-size: 14px;
+            color: #111;
+        }
+        .popup-card .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 6px;
+        }
+        .popup-card p {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Tombol Tunjukkan Jalan di Popup */
+        .btn-route {
+            display: inline-block;
+            width: 100%;
+            padding: 7px 10px;
+            background-color: #25D366;
+            color: white;
+            font-weight: 700;
+            font-size: 11px;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: background 0.2s ease;
+        }
+        .btn-route:hover {
+            background-color: #1EBE5D;
+        }
+
+        /* Bottom Action Buttons */
+        .btn-gps-bottom {
+            background-color: #8E24AA;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-gmaps-smart {
+            background-color: #4285F4;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-panel {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto 15px auto;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Footer & Collapsible Details Styling */
+        .site-footer {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 15px 20px;
+            font-family: sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            border-radius: 10px;
+        }
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .footer-details summary {
+            cursor: pointer;
+            list-style: none;
+        }
+        .footer-details summary::-webkit-details-marker {
+            display: none;
+        }
+        .footer-title-toggle {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #9ca3af;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+        .footer-title-toggle:hover {
+            color: #f3f4f6;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px 16px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .team-grid span {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsive Media Queries */
+        @media screen and (max-width: 768px) {
+            body { padding: 12px; }
+            h1 { font-size: 20px; }
+            p.subtitle { font-size: 12px; margin-bottom: 15px; }
+            .btn-mode {
+                padding: 10px 14px;
+                font-size: 12.5px;
+                flex: 1;
+                text-align: center;
+                min-width: 120px;
+            }
+            #map { height: 420px; }
+            .info-panel { font-size: 13px; padding: 10px 14px; }
+
+            /* Navbar Mobile Horizontal Scroll Fix */
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 15px;
+            }
+            .navbar-links {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                width: 100%;
+                gap: 8px;
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .navbar-links::-webkit-scrollbar {
+                display: none;
+            }
+            .navbar-links a {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                font-size: 13px;
+                padding: 5px 10px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 { font-size: 17px; }
+            .mode-container { flex-direction: column; gap: 8px; }
+            .btn-mode { width: 100%; }
+            #map { height: 360px; }
+            .controls {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .controls::-webkit-scrollbar { height: 4px; }
+            .controls::-webkit-scrollbar-thumb { background: #bbb; border-radius: 2px; }
+            button, .btn-gmaps { padding: 8px 12px; font-size: 12px; flex-shrink: 0; }
+            .actions { flex-direction: column; width: 100%; }
+            .actions button, .actions .btn-gmaps { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Navbar / Bilah Navigasi -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <span>🏠</span> KKN Ulaweng 2026
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Beranda</a>
+            <a href="peta_ulaweng.html" class="active">Peta Ulaweng</a>
+            <a href="apbdes.html">APBDes Desa</a>
+            <a href="administrasi.html">Administrasi Desa</a>
+            <a href="penduduk.html">Data Penduduk</a>
+            <a href="admin.html">Panel Admin</a>
+        </div>
+    </nav>
+
+    <h1>🗺️ Portal Geografis Desa Ulaweng</h1>
+    <p class="subtitle">Website Potensi, Fasilitas & UMKM Desa Ulaweng</p>
+
+    <!-- Switcher Mode Utama -->
+    <div class="mode-container">
+        <button id="mode-potensi" class="btn-mode active" onclick="setMode('potensi')">🌾 Peta Potensi Sektor</button>
+        <button id="mode-fasilitas" class="btn-mode" onclick="setMode('fasilitas')">🏛️ Peta Fasilitas & POI Desa</button>
+        <button id="mode-umkm" class="btn-mode" onclick="setMode('umkm')">🏪 Peta UMKM Desa</button>
+    </div>
+
+    <!-- Sub-Filter Mode Potensi Sektor -->
+    <div class="controls" id="potensi-controls">
+        <button id="btn-default" onclick="filterSektor('Default')">🏠 Batas Desa</button>
+        <button id="btn-sawah"   onclick="filterSektor('Sawah')">🌾 Persawahan</button>
+        <button id="btn-tambak"  onclick="filterSektor('Tambak')">🦐 Tambak</button>
+        <button id="btn-laut"    onclick="filterSektor('Laut')">🌊 Laut</button>
+        <button id="btn-kelapa"  onclick="filterSektor('Kelapa')">🥥 Kebun Kelapa</button>
+        <button id="btn-semua"   onclick="filterSektor('Semua')">🌐 Semua Sektor</button>
+    </div>
+
+    <!-- Sub-Filter Mode Fasilitas Desa -->
+    <div class="controls" id="fasilitas-controls" style="display: none;">
+        <button class="btn-fas-filter active-fas" onclick="filterFasilitas('Semua', this)">Semua Titik</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Pemerintahan', this)">🏛️ Pemerintahan</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Pendidikan', this)">🏫 Pendidikan</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Kesehatan', this)">🏥 Kesehatan</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Ibadah', this)">🕌 Ibadah</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Wisata', this)">🏖️ Wisata</button>
+        <button class="btn-fas-filter" onclick="filterFasilitas('Infrastruktur', this)">🚪 Infrastruktur & Ikon</button>
+    </div>
+
+    <!-- Container Peta -->
+    <div id="map"></div>
+
+    <!-- Panel Status -->
+    <div class="info-panel" id="info-panel">
+        <strong>Status Tampilan:</strong> <span id="status-filter">Mode Peta Potensi Sektor (Batas Desa)</span>
+    </div>
+
+    <!-- Direct Action Buttons -->
+    <div class="actions">
+        <button class="btn-gps-bottom" onclick="cariLokasiSaya()">
+            📍 Lokasi Saya
+        </button>
+        <button class="btn-gmaps btn-gmaps-smart" onclick="openGoogleMaps()">
+            📍 Buka Lokasi Desa Ulaweng di Google Maps
+        </button>
+    </div>
+
+    <!-- Footer KKN (Collapsible / Close & Open) -->
+    <footer class="site-footer">
+          <div class="footer-container">
+            <details class="footer-details">
+                <summary class="footer-title-toggle">
+                    <span>Disusun oleh Tim KKN Reguler Desa Ulaweng 2026</span>
+                    <small style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Ketuk untuk Lihat/Tutup ▾</small>
+                </summary>
+                <div class="team-grid">
+                  <span>Ariel Apriadi</span>
+                  <span>Muh. Biyadikal Khoir</span>
+                  <span>Syakira Aulia Annissa</span>
+                  <span>Rifqah Fauziah R</span>
+                  <span>Thoriq Kemal Abillah</span>
+                  <span>Syuk Rina Bte Amirudin</span>
+                  <span>Ucok Marulli Matondang</span>
+                  <span>Muh. Ikhwan Ghazalah Tamar</span>
+                  <span>Sarmila</span>
+                  <span>Regita Zalfa Khalizah Haryanto</span>
+                  <span>Melni Annisatul Mardia</span>
+                  <span>Taufik Hidayat</span>
+                  <span>Indriana</span>
+                  <span>Ela Sukmawati Tamrin</span>
+                  <span>Virji Andini Tri Ramadani Powatu</span>
+                </div>
+            </details>
+          </div>
+    </footer>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Koordinat Utama Desa Ulaweng
+    const ULAWENG_LAT = -3.952509446024583;
+    const ULAWENG_LNG = 121.33541203412234;
+
+    // Data UMKM Desa Ulaweng
+    const umkmDataList = [
+        { id: 1, nama: "Kios 3 Putri", lat: -3.954956, lng: 121.335022, foto: "Kios_3_Putri.jpeg" },
+        { id: 2, nama: "Kios Alfatah", lat: -3.948056, lng: 121.338501, foto: "Kios_Alfatah.jpeg" },
+        { id: 3, nama: "Kios 2 Putri", lat: -3.949552, lng: 121.337486, foto: "Kios_2_Putri.jpeg" },
+        { id: 4, nama: "Kios Darma", lat: -3.953057, lng: 121.334732, foto: "Kios_Darma.jpeg" },
+        { id: 5, nama: "Kios Hasma", lat: -3.954444, lng: 121.335319, foto: "Kios_Hasma.jpeg" },
+        { id: 6, nama: "Kios Hasra", lat: -3.950053, lng: 121.337067, foto: "Kios_Hasra.jpeg" },
+        { id: 7, nama: "Kios Ikhsan", lat: -3.949664, lng: 121.337387, foto: "Kios_Ikhsan.jpeg" },
+        { id: 8, nama: "Kios Nur Annisa", lat: -3.953859, lng: 121.334786, foto: "Kios_Nur_Annisa.jpeg" },
+        { id: 9, nama: "Kios Reva", lat: -3.949715, lng: 121.337395, foto: "Kios_Reva.jpeg"},
+        { id: 10, nama: "Kios Salwa", lat: -3.954227, lng: 121.335854, foto: "Kios_Salwa.jpeg"},
+        { id: 11, nama: "Kios Tani Ulaweng", lat: -3.955027, lng: 121.335541, foto: "Kios_Tani_Ulaweng.jpeg"},
+        { id: 12, nama: "Kios Zan-Zan", lat: -3.953848, lng: 121.334488, foto: "Kios_zan-zan.jpeg"},
+    ];
+
+    // Basemaps Presisi Tinggi
+    const satelitLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        maxZoom: 18
+    });
+
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18
+    });
+
+    const map = L.map('map', {
+        center: [ULAWENG_LAT, ULAWENG_LNG],
+        zoom: 14,
+        layers: [satelitLayer]
+    });
+
+    const baseMaps = {
+        "📷 Citra Satelit": satelitLayer,
+        "🗺️ Peta Jalan (OSM)": osmLayer
+    };
+    L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
+
+    // Skema Warna Sektor Potensi
+    const sektorColor = {
+        'Sawah': '#2E7D32',
+        'Tambak': '#00ACC1',
+        'Laut': '#1565C0',
+        'Kelapa': '#F57F17'
+    };
+
+    // Skema Warna Kategori Fasilitas Desa
+    const katColor = {
+        'Pemerintahan': '#3F51B5',
+        'Pendidikan': '#FB8C00',
+        'Kesehatan': '#E53935',
+        'Ibadah': '#43A047',
+        'Wisata': '#00ACC1',
+        'Infrastruktur': '#757575',
+        'Ikon Desa': '#8E24AA'
+    };
+
+    // Icon Custom Marker Lokasi Saya
+    const userLocationIcon = L.divIcon({
+        className: 'user-location-container',
+        html: `
+            <div class="user-location-pulse"></div>
+            <div class="user-location-pin"></div>
+        `,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+    });
+
+    // Global State Variables
+    let activeMode = 'potensi'; 
+    let rawSektorData = null;
+    let rawFasilitasData = null;
+    let batasDesaLayer = null;
+    let batasDesaBounds = null;
+    let sektorLayer = null;
+    let fasilitasGroup = L.layerGroup();
+    let umkmGroup = L.layerGroup();
+    let userMarker = null;
+    let accuracyCircle = null;
+
+    const worldBounds = [[-90, -180], [90, -180], [90, 180], [-90, 180]];
+
+    function processGeoJSONGeometry(geometry) {
+        let villageCoords = [];
+        if (geometry.type === 'Polygon') {
+            villageCoords = geometry.coordinates.map(ring => 
+                ring.map(coord => [coord[1], coord[0]])
+            );
+        } else if (geometry.type === 'MultiPolygon') {
+            villageCoords = geometry.coordinates.map(poly => 
+                poly.map(ring => ring.map(coord => [coord[1], coord[0]]))
+            ).flat(1);
+        }
+        return villageCoords;
+    }
+
+    fetch('Batas_Desa_Ulaweng.geojson')
+        .then(res => res.json())
+        .then(data => {
+            const feature = data.features[0];
+            const villageCoords = processGeoJSONGeometry(feature.geometry);
+
+            batasDesaLayer = L.polygon([worldBounds, ...villageCoords], {
+                color: '#111111',
+                weight: 2,
+                dashArray: '6, 6',
+                fillColor: '#000000',
+                fillOpacity: 0.55
+            }).addTo(map);
+
+            const tempGeoJson = L.geoJSON(data);
+            batasDesaBounds = tempGeoJson.getBounds();
+            map.fitBounds(batasDesaBounds, { padding: [20, 20] });
+        })
+        .catch(err => console.error("Gagal memuat Batas_Desa_Ulaweng.geojson:", err));
+
+    fetch('Sektor_Potensi_Ulaweng.geojson')
+        .then(res => res.json())
+        .then(data => { rawSektorData = data; })
+        .catch(err => console.error("Gagal memuat Sektor_Potensi_Ulaweng.geojson:", err));
+
+    fetch('POI_Desa_Ulaweng.geojson')
+        .then(res => res.json())
+        .then(data => { rawFasilitasData = data; })
+        .catch(err => console.error("Gagal memuat POI_Desa_Ulaweng.geojson:", err));
+
+    function parseKeterangan(keteranganText) {
+        const text = (keteranganText || '').trim();
+        const textLower = text.toLowerCase();
+
+        let kat = 'Infrastruktur';
+        let icon = '📍';
+
+        if (textLower.includes('kantor') || textLower.includes('desa') || textLower.includes('balai') || textLower.includes('pemerintah') || textLower.includes('dusun')) {
+            kat = 'Pemerintahan';
+            icon = '🏛️';
+            if (textLower.includes('dusun') || textLower.includes('rumah')) icon = '🏠';
+        } else if (textLower.includes('sd') || textLower.includes('smp') || textLower.includes('sma') || textLower.includes('tk') || textLower.includes('sekolah') || textLower.includes('paud') || textLower.includes('madrasah')) {
+            kat = 'Pendidikan';
+            icon = '🏫';
+        } else if (textLower.includes('masjid') || textLower.includes('mesjid') || textLower.includes('musholla') || textLower.includes('mushola') || textLower.includes('gereja')) {
+            kat = 'Ibadah';
+            icon = '🕌';
+        } else if (textLower.includes('puskesmas') || textLower.includes('posyandu') || textLower.includes('pustu') || textLower.includes('klinik') || textLower.includes('rs')) {
+            kat = 'Kesehatan';
+            icon = '🏥';
+            if (textLower.includes('posyandu')) icon = '🩺';
+        } else if (textLower.includes('wisata') || textLower.includes('pantai') || textLower.includes('taman') || textLower.includes('air terjun') || textLower.includes('spot')) {
+            kat = 'Wisata';
+            icon = '🏖️';
+        } else if (textLower.includes('ikon') || textLower.includes('tugu') || textLower.includes('gapura') || textLower.includes('selamat datang')) {
+            kat = 'Ikon Desa';
+            icon = '🦐';
+        } else if (textLower.includes('batas')) {
+            kat = 'Infrastruktur';
+            icon = '🚪';
+        }
+
+        return {
+            nama: text || 'Fasilitas Desa',
+            kat: kat,
+            icon: icon
+        };
+    }
+
+    function renderFasilitasMarkers(filterKategori = 'Semua') {
+        fasilitasGroup.clearLayers();
+        if (!rawFasilitasData) return;
+
+        rawFasilitasData.features.forEach(feature => {
+            const p = feature.properties;
+            const coords = feature.geometry.coordinates;
+            const lat = coords[1];
+            const lng = coords[0];
+
+            const fid = p.fid || p.FID || '';
+            const rawKet = p.Keterangan || p.keterangan || 'Fasilitas Desa';
+            
+            let namaFoto = p.foto || p.Foto || p.FOTO || p.gambar || p.image || '';
+            if (namaFoto && !namaFoto.includes('.')) {
+                namaFoto += '.jpg'; 
+            }
+
+            const imgPath = namaFoto ? `images/${namaFoto}` : 'images/default.jpeg';
+            const parsed = parseKeterangan(rawKet);
+
+            if (filterKategori !== 'Semua' && parsed.kat !== filterKategori && 
+               !(filterKategori === 'Infrastruktur' && (parsed.kat === 'Infrastruktur' || parsed.kat === 'Ikon Desa'))) {
+                return;
+            }
+
+            const markerBgColor = katColor[parsed.kat] || '#D84315';
+            const customIcon = L.divIcon({
+                className: 'custom-poi-container',
+                html: `<div class="custom-poi-marker" style="background-color: ${markerBgColor}; width: 32px; height: 32px;">${parsed.icon}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+
+            const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+            const marker = L.marker([lat, lng], { icon: customIcon });
+            marker.bindPopup(`
+                <div class="popup-card">
+                    <img src="${imgPath}" alt="${parsed.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
+                    <span class="badge" style="background:${markerBgColor}">${parsed.kat}</span>
+                    <h3>${parsed.nama}</h3>
+                    <p><b>Desa Ulaweng</b> ${fid ? `(ID: ${fid})` : ''}</p>
+                    <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
+                </div>
+            `);
+            fasilitasGroup.addLayer(marker);
+        });
+    }
+
+    function renderUMKMMarkers() {
+        umkmGroup.clearLayers();
+        const iconsList  = ["🏪", "🛍️", "🏬", "🛒"];
+        const colorsList = ["#E65100", "#D84315", "#0288D1", "#7B1FA2"];
+
+        umkmDataList.forEach((item, index) => {
+            const patternIndex = Math.floor(index / 2) % iconsList.length;
+            const selectedIcon  = iconsList[patternIndex];
+            const selectedColor = colorsList[patternIndex];
+
+            let fotoName = item.foto || '';
+            if (fotoName && !fotoName.includes('.')) {
+                fotoName += '.jpg'; 
+            }
+            
+            const imgPath = fotoName ? `umkm/${fotoName}` : 'images/default.jpeg';
+            const customIcon = L.divIcon({
+                className: 'custom-poi-container',
+                html: `<div class="custom-poi-marker" style="background-color: ${selectedColor}; width: 32px; height: 32px;">${selectedIcon}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+            });
+
+            const routeUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+
+            const marker = L.marker([item.lat, item.lng], { icon: customIcon });
+            marker.bindPopup(`
+                <div class="popup-card">
+                    <img src="${imgPath}" alt="${item.nama}" onerror="this.onerror=null; this.src='images/default.jpeg';">
+                    <span class="badge" style="background:${selectedColor}">UMKM Desa</span>
+                    <h3>${item.nama}</h3>
+                    <a href="${routeUrl}" target="_blank" class="btn-route">🚗 Tunjukkan Jalan</a>
+                </div>
+            `);
+            umkmGroup.addLayer(marker);
+        });
+    }
+
+    function setMode(mode) {
+        activeMode = mode;
+
+        document.getElementById('mode-potensi').classList.toggle('active', mode === 'potensi');
+        document.getElementById('mode-fasilitas').classList.toggle('active', mode === 'fasilitas');
+        document.getElementById('mode-umkm').classList.toggle('active', mode === 'umkm');
+
+        const potensiControls = document.getElementById('potensi-controls');
+        const fasilitasControls = document.getElementById('fasilitas-controls');
+        
+        if (sektorLayer) map.removeLayer(sektorLayer);
+        map.removeLayer(fasilitasGroup);
+        map.removeLayer(umkmGroup);
+
+        if (mode === 'potensi') {
+            potensiControls.style.display = 'flex';
+            fasilitasControls.style.display = 'none';
+            filterSektor('Default');
+        } else if (mode === 'fasilitas') {
+            potensiControls.style.display = 'none';
+            fasilitasControls.style.display = 'flex';
+            
+            renderFasilitasMarkers('Semua');
+            fasilitasGroup.addTo(map);
+            
+            document.getElementById('status-filter').innerText = "Menampilkan Semua Fasilitas & Point of Interest Desa Ulaweng";
+            
+            if (rawFasilitasData) {
+                const tempFasitasGeoJSON = L.geoJSON(rawFasilitasData);
+                if (tempFasitasGeoJSON.getBounds().isValid()) {
+                    map.fitBounds(tempFasitasGeoJSON.getBounds(), { padding: [40, 40] });
+                }
+            } else if (batasDesaBounds) {
+                map.fitBounds(batasDesaBounds, { padding: [20, 20] });
+            }
+        } else if (mode === 'umkm') {
+            potensiControls.style.display = 'none';
+            fasilitasControls.style.display = 'none';
+
+            renderUMKMMarkers();
+            umkmGroup.addTo(map);
+
+            document.getElementById('status-filter').innerText = "Menampilkan Semua UMKM Desa Ulaweng";
+
+            if (umkmGroup.getLayers().length > 0) {
+                const bounds = L.featureGroup(umkmGroup.getLayers()).getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
+            }
+        }
+    }
+
+    function filterSektor(sektorTarget) {
+        if (sektorLayer) {
+            map.removeLayer(sektorLayer);
+            sektorLayer = null;
+        }
+
+        if (sektorTarget === 'Default') {
+            document.getElementById('status-filter').innerText = "Mode Peta Potensi Sektor (Batas Desa)";
+            if (batasDesaBounds) map.fitBounds(batasDesaBounds, { padding: [20, 20] });
+            return;
+        }
+
+        if (!rawSektorData) {
+            alert("Data Sektor_Potensi_Ulaweng.geojson sedang dimuat. Silakan coba sebentar lagi.");
+            return;
+        }
+
+        document.getElementById('status-filter').innerText = 
+            sektorTarget === 'Semua' ? 'Menampilkan Semua Sektor Potensi' : `Menampilkan Sektor ${sektorTarget}`;
+
+        let filteredFeatures = rawSektorData.features;
+        if (sektorTarget !== 'Semua') {
+            filteredFeatures = rawSektorData.features.filter(feature => {
+                const s = feature.properties.sektor || feature.properties.Kategori || feature.properties.Sektor;
+                return s && s.toLowerCase() === sektorTarget.toLowerCase();
+            });
+        }
+
+        sektorLayer = L.geoJSON({ type: 'FeatureCollection', features: filteredFeatures }, {
+            style: function (feature) {
+                const s = feature.properties.sektor || feature.properties.Kategori || feature.properties.Sektor || '';
+                return {
+                    color: '#000000',
+                    weight: 2,
+                    dashArray: '3, 3',
+                    fillColor: sektorColor[s] || '#FFFFFF',
+                    fillOpacity: 0.65
+                };
+            },
+            onEachFeature: function (feature, layer) {
+                const p = feature.properties;
+                const sektorNama = p.sektor || p.Kategori || p.Sektor || 'Sektor';
+                layer.bindPopup(`
+                    <div style="font-family: sans-serif; min-width: 170px;">
+                        <h3 style="margin: 0 0 5px 0; color: ${sektorColor[sektorNama] || '#333'}">${sektorNama}</h3>
+                        <hr style="border: 0; border-top: 1px solid #ccc; margin: 5px 0;">
+                        <b>Lokasi:</b> ${p.nama_area || p.Nama || 'Area Desa Ulaweng'}<br>
+                        <b>Varietas/Komoditas:</b> ${p.varietas || p.Varietas || p.Komoditas || 'Tersedia'}
+                    </div>
+                `);
+            }
+        }).addTo(map);
+
+        if (sektorLayer.getBounds().isValid()) {
+            map.fitBounds(sektorLayer.getBounds(), { padding: [40, 40], maxZoom: 16 });
+        }
+    }
+
+    function filterFasilitas(katTarget, btnElement) {
+        const buttons = document.querySelectorAll('.btn-fas-filter');
+        buttons.forEach(btn => btn.classList.remove('active-fas'));
+        btnElement.classList.add('active-fas');
+
+        renderFasilitasMarkers(katTarget);
+        document.getElementById('status-filter').innerText = katTarget === 'Semua' 
+            ? "Menampilkan Semua Fasilitas & Point of Interest Desa Ulaweng" 
+            : `Menampilkan Fasilitas Kategori: ${katTarget}`;
+
+        if (fasilitasGroup.getLayers().length > 0) {
+            const bounds = L.featureGroup(fasilitasGroup.getLayers()).getBounds();
+            if (bounds.isValid()) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 17 });
+            }
+        }
+    }
+
+    function cariLokasiSaya() {
+        if (!navigator.geolocation) {
+            alert("Browser Anda tidak mendukung Geolocation.");
+            return;
+        }
+
+        const statusEl = document.getElementById('status-filter');
+        statusEl.innerText = "⏳ Sedang mengunci lokasi GPS presisi tinggi...";
+
+        const geoOptions = {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+
+                if (userMarker) map.removeLayer(userMarker);
+                if (accuracyCircle) map.removeLayer(accuracyCircle);
+
+                userMarker = L.marker([lat, lng], { icon: userLocationIcon }).addTo(map);
+                
+                accuracyCircle = L.circle([lat, lng], {
+                    radius: accuracy,
+                    color: '#8E24AA',
+                    fillColor: '#8E24AA',
+                    fillOpacity: 0.15,
+                    weight: 1
+                }).addTo(map);
+
+                userMarker.bindPopup(`
+                    <div style="text-align:center;">
+                        📍 <b>Lokasi Anda Saat Ini</b><br>
+                        <small>Tingkat akurasi: ±${Math.round(accuracy)} meter</small>
+                    </div>
+                `).openPopup();
+
+                if (accuracy > 100) {
+                    map.fitBounds(accuracyCircle.getBounds(), { padding: [20, 20] });
+                } else {
+                    map.flyTo([lat, lng], 17, { duration: 1.5 });
+                }
+
+                statusEl.innerText = `✅ Lokasi Ditemukan (Akurasi ±${Math.round(accuracy)}m)`;
+            },
+            (error) => {
+                console.error("Gagal mengambil lokasi GPS:", error);
+                let pesanError = "Gagal mengambil lokasi GPS.";
+
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        pesanError = "Akses lokasi ditolak! Izinkan akses lokasi pada browser Anda.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        pesanError = "Sinyal GPS/Sistem lokasi tidak tersedia. Aktifkan GPS pada HP Anda.";
+                        break;
+                    case error.TIMEOUT:
+                        pesanError = "Pencarian lokasi time-out. Pastikan sinyal GPS atau internet stabil.";
+                        break;
+                }
+
+                alert(pesanError);
+                statusEl.innerText = "❌ Gagal Mengambil Lokasi GPS";
+            },
+            geoOptions
+        );
+    }
+
+    function openGoogleMaps() {
+        const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent || navigator.vendor || window.opera);
+        const gmapsUrl = "https://maps.app.goo.gl/TCbFavb3YdjtJb9V8";
+        if (isMobile) { window.location.href = gmapsUrl; } else { window.open(gmapsUrl, '_blank'); }
+    }
+</script>
+</body>
+</html>
